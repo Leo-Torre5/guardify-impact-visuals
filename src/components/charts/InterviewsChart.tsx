@@ -1,0 +1,49 @@
+
+import React from 'react';
+
+interface InterviewsChartProps {
+  data: Array<{
+    month: string;
+    count: number;
+  }>;
+}
+
+const InterviewsChart: React.FC<InterviewsChartProps> = ({ data }) => {
+  const maxCount = Math.max(...data.map(d => d.count));
+  
+  const formatMonth = (monthStr: string) => {
+    const [year, month] = monthStr.split('-');
+    const date = new Date(parseInt(year), parseInt(month) - 1);
+    return date.toLocaleDateString('en-US', { month: 'short' });
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-end justify-between h-48 gap-2">
+        {data.map((item, index) => {
+          const height = (item.count / maxCount) * 100;
+          return (
+            <div key={index} className="flex flex-col items-center flex-1">
+              <div className="w-full bg-slate-200 rounded-t-lg relative overflow-hidden">
+                <div
+                  className="bg-gradient-to-t from-indigo-500 to-indigo-400 w-full rounded-t-lg transition-all duration-1000 ease-out flex items-end justify-center pb-2"
+                  style={{ height: `${height}%`, minHeight: '40px' }}
+                >
+                  <span className="text-white text-xs font-medium">{item.count}</span>
+                </div>
+              </div>
+              <div className="text-xs text-slate-600 mt-2">{formatMonth(item.month)}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="text-center">
+        <div className="text-sm text-slate-600">
+          Monthly interview uploads showing consistent activity
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default InterviewsChart;
