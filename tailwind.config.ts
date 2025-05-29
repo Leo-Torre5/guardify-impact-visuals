@@ -64,12 +64,14 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				guardify: {
-					purple: '#8B5CF6',
-					'purple-light': '#A78BFA',
-					'purple-dark': '#7C3AED',
-					grey: '#64748B',
-					'grey-light': '#94A3B8',
-					'grey-dark': '#475569',
+					purple: '#6C3EFF',
+					'purple-light': '#F4F1FA',
+					'purple-dark': '#5A32CC',
+					blue: '#4264FB',
+					'blue-light': '#EDF2FF',
+					grey: '#EAEAEA',
+					'grey-light': '#F8F9FA',
+					'grey-dark': '#3E3E3E',
 					background: '#F8FAFC'
 				}
 			},
