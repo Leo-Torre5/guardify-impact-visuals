@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Download, 
   Share2, 
@@ -88,144 +87,101 @@ const ImpactReport = () => {
     law_enforcement_time_saved: 320
   };
 
-  const ReportContent = () => (
-    <div className="space-y-8">
-      {/* KPI Cards */}
-      <KPICards data={reportData.kpi_metrics} />
-
-      {/* Interview Activity with Filter */}
-      <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-        <div className="flex items-start gap-6">
-          <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-            <FileText className="w-6 h-6 text-blue-600" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-xl font-semibold text-slate-800 mb-2">Interview Activity</h3>
-                <p className="text-slate-600">
-                  Your team securely logged interviews every month—ensuring consistent chain of custody and data availability.
-                </p>
-              </div>
-              <Select value={viewFilter} onValueChange={setViewFilter}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="Select view" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="my-cac">My CAC</SelectItem>
-                  <SelectItem value="nationwide">Nationwide</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <InterviewsChart data={reportData.interviews_uploaded_by_month} />
-          </div>
-        </div>
-      </Card>
-
-      {/* Age Distribution */}
-      <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-        <div className="flex items-start gap-6">
-          <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Baby className="w-6 h-6 text-pink-600" />
-          </div>
-          <div className="flex-1">
-            <h3 className="text-xl font-semibold text-slate-800 mb-2">Age Distribution of Interviewed Survivors</h3>
-            <p className="text-slate-600 mb-6">
-              Understanding age patterns helps tailor appropriate support services and interview approaches.
-            </p>
-            <AgeDistributionChart data={reportData.age_distribution} />
-          </div>
-        </div>
-      </Card>
-
-      {/* Regional Reach */}
-      <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-        <div className="flex items-start gap-6">
-          <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Building className="w-6 h-6 text-green-600" />
-          </div>
-          <div className="flex-1">
-            <h3 className="text-xl font-semibold text-slate-800 mb-2">Regional Reach</h3>
-            <p className="text-slate-600 mb-6">
-              Guardify's impact spans across regions, supporting Child Advocacy Centers nationwide.
-            </p>
-            <RegionalReachChart />
-          </div>
-        </div>
-      </Card>
-
-      {/* Agency Engagement */}
-      <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-        <div className="flex items-start gap-6">
-          <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Users className="w-6 h-6 text-indigo-600" />
-          </div>
-          <div className="flex-1">
-            <h3 className="text-xl font-semibold text-slate-800 mb-2">Agencies Engaged Across MDT</h3>
-            <p className="text-slate-600 mb-6">
-              Multi-disciplinary team collaboration ensures comprehensive support for each case.
-            </p>
-            <AgencyEngagementChart data={reportData.agency_engagement} />
-          </div>
-        </div>
-      </Card>
-
-      {/* Cost Savings */}
-      <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-        <div className="flex items-start gap-6">
-          <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Clock className="w-6 h-6 text-emerald-600" />
-          </div>
-          <div className="flex-1">
-            <h3 className="text-xl font-semibold text-slate-800 mb-2">Quantified Savings & Time Saved</h3>
-            <p className="text-slate-600 mb-6">
-              Digital workflows eliminate traditional costs while saving valuable staff time.
-            </p>
-            <CostSavingsChart 
-              costSavings={reportData.cost_savings} 
-              timeSavedHours={reportData.time_saved_hours} 
-            />
-          </div>
-        </div>
-      </Card>
-    </div>
-  );
+  const sidebarItems = [
+    { name: "Dashboard", icon: BarChart3, active: false },
+    { name: "Video Redaction", icon: Eye, active: false },
+    { name: "Video Insights", icon: Camera, active: false },
+    { name: "Expression Analysis", icon: Activity, active: false },
+    { name: "Case Summary", icon: FileText, active: false },
+    { name: "Document Redaction", icon: FileText, active: false },
+    { name: "Pose Recognition", icon: Target, active: false },
+    { name: "Gaze Detection", icon: Search, active: false },
+    { name: "Behavioral Heatmaps", icon: Zap, active: false },
+    { name: "Multi-Camera Sync", icon: Camera, active: false },
+    { name: "Anomaly Detection", icon: AlertTriangle, active: false },
+    { name: "Impact Report", icon: BarChart3, active: true },
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Branded Header */}
-      <div className="bg-gradient-to-r from-guardify-purple to-guardify-blue text-white">
-        <div className="px-6 py-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-              <Shield className="w-6 h-6 text-white" />
+    <div className="min-h-screen bg-slate-50 flex">
+      {/* Sidebar */}
+      <div className={`${sidebarOpen ? 'w-64' : 'w-16'} transition-all duration-300 bg-slate-900 border-r border-slate-200 flex flex-col`}>
+        {/* Header */}
+        <div className="h-16 flex items-center px-4 border-b border-slate-700">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-400 via-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+              <Shield className="w-5 h-5 text-white" />
             </div>
-            <div className="text-2xl font-bold">Guardify</div>
+            {sidebarOpen && (
+              <div className="text-white font-semibold text-lg">Guardify</div>
+            )}
           </div>
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Impact Report</h1>
-            <p className="text-white/90 text-lg">Forwarding the Mission of Child Protection • Q4 2024</p>
-          </div>
+          <button 
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="ml-auto text-slate-400 hover:text-white"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
         </div>
+
+        {/* Subtitle */}
+        {sidebarOpen && (
+          <div className="px-4 py-2 border-b border-slate-700">
+            <div className="text-xs text-slate-400 uppercase tracking-wide">Evidence Intelligence</div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <nav className="flex-1 p-2 space-y-1">
+          {sidebarItems.map((item, index) => (
+            <div
+              key={index}
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                item.active 
+                  ? 'bg-purple-600 text-white' 
+                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+              }`}
+            >
+              <item.icon className="w-5 h-5 flex-shrink-0" />
+              {sidebarOpen && (
+                <span className="text-sm font-medium">{item.name}</span>
+              )}
+            </div>
+          ))}
+        </nav>
+
+        {/* User section */}
+        {sidebarOpen && (
+          <div className="p-4 border-t border-slate-700">
+            <div className="text-xs text-slate-400">leo.t@guardify.com</div>
+          </div>
+        )}
       </div>
 
-      {/* Navigation and Content */}
-      <div className="px-6 py-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex gap-3">
-            <Button variant="outline" className="flex items-center gap-2">
-              <Share2 className="w-4 h-4" />
-              Share Report
-            </Button>
-            <Button className="flex items-center gap-2 bg-guardify-purple hover:bg-guardify-purple-dark">
-              <Download className="w-4 h-4" />
-              Download PDF
-            </Button>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <div className="bg-white border-b border-slate-200 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold text-slate-800">Impact Report</h1>
+              <p className="text-slate-600 mt-1">Forwarding the Mission of Child Protection • Q4 2024</p>
+            </div>
+            <div className="flex gap-3">
+              <Button variant="outline" className="flex items-center gap-2">
+                <Share2 className="w-4 h-4" />
+                Share Report
+              </Button>
+              <Button className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700">
+                <Download className="w-4 h-4" />
+                Download PDF
+              </Button>
+            </div>
           </div>
         </div>
 
         {/* Mission Statement */}
-        <div className="mb-8 p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl">
+        <div className="px-6 py-8 bg-gradient-to-r from-purple-50 to-blue-50">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-slate-800 mb-3">
               Accelerate your investigations with Evidence Intelligence Tools
@@ -236,57 +192,111 @@ const ImpactReport = () => {
           </div>
         </div>
 
-        {/* Tabs Navigation */}
-        <Tabs defaultValue="impact" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8">
-            <TabsTrigger value="impact" className="data-[state=active]:bg-guardify-purple data-[state=active]:text-white">
-              Impact Report
-            </TabsTrigger>
-            <TabsTrigger value="operational" disabled className="opacity-50">
-              Operational Report
-            </TabsTrigger>
-            <TabsTrigger value="insight" disabled className="opacity-50">
-              Guardify Insight Report
-            </TabsTrigger>
-            <TabsTrigger value="regional" disabled className="opacity-50">
-              Regional Reports
-            </TabsTrigger>
-            <TabsTrigger value="state" disabled className="opacity-50">
-              State Reports
-            </TabsTrigger>
-          </TabsList>
+        {/* Content */}
+        <div className="flex-1 px-6 py-8 space-y-8 max-w-7xl mx-auto w-full">
+          
+          {/* KPI Cards */}
+          <KPICards data={reportData.kpi_metrics} />
 
-          <TabsContent value="impact" className="space-y-8">
-            <ReportContent />
-          </TabsContent>
-
-          <TabsContent value="operational" className="space-y-8">
-            <div className="text-center py-12">
-              <p className="text-slate-500">Operational Report coming soon...</p>
+          {/* Interview Activity with Filter */}
+          <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
+            <div className="flex items-start gap-6">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <FileText className="w-6 h-6 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-800 mb-2">Interview Activity</h3>
+                    <p className="text-slate-600">
+                      Your team securely logged interviews every month—ensuring consistent chain of custody and data availability.
+                    </p>
+                  </div>
+                  <Select value={viewFilter} onValueChange={setViewFilter}>
+                    <SelectTrigger className="w-48">
+                      <SelectValue placeholder="Select view" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="my-cac">My CAC</SelectItem>
+                      <SelectItem value="nationwide">Nationwide</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <InterviewsChart data={reportData.interviews_uploaded_by_month} />
+              </div>
             </div>
-          </TabsContent>
+          </Card>
 
-          <TabsContent value="insight" className="space-y-8">
-            <div className="text-center py-12">
-              <p className="text-slate-500">Guardify Insight Report coming soon...</p>
+          {/* Age Distribution */}
+          <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
+            <div className="flex items-start gap-6">
+              <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Baby className="w-6 h-6 text-pink-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-slate-800 mb-2">Age Distribution of Interviewed Survivors</h3>
+                <p className="text-slate-600 mb-6">
+                  Understanding age patterns helps tailor appropriate support services and interview approaches.
+                </p>
+                <AgeDistributionChart data={reportData.age_distribution} />
+              </div>
             </div>
-          </TabsContent>
+          </Card>
 
-          <TabsContent value="regional" className="space-y-8">
-            <div className="text-center py-12">
-              <p className="text-slate-500">Regional Reports coming soon...</p>
+          {/* Regional Reach */}
+          <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
+            <div className="flex items-start gap-6">
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Building className="w-6 h-6 text-green-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-slate-800 mb-2">Regional Reach</h3>
+                <p className="text-slate-600 mb-6">
+                  Guardify's impact spans across regions, supporting Child Advocacy Centers nationwide.
+                </p>
+                <RegionalReachChart />
+              </div>
             </div>
-          </TabsContent>
+          </Card>
 
-          <TabsContent value="state" className="space-y-8">
-            <div className="text-center py-12">
-              <p className="text-slate-500">State Reports coming soon...</p>
+          {/* Agency Engagement */}
+          <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
+            <div className="flex items-start gap-6">
+              <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Users className="w-6 h-6 text-indigo-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-slate-800 mb-2">Agencies Engaged Across MDT</h3>
+                <p className="text-slate-600 mb-6">
+                  Multi-disciplinary team collaboration ensures comprehensive support for each case.
+                </p>
+                <AgencyEngagementChart data={reportData.agency_engagement} />
+              </div>
             </div>
-          </TabsContent>
-        </Tabs>
+          </Card>
+
+          {/* Cost Savings */}
+          <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
+            <div className="flex items-start gap-6">
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Clock className="w-6 h-6 text-emerald-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-slate-800 mb-2">Quantified Savings & Time Saved</h3>
+                <p className="text-slate-600 mb-6">
+                  Digital workflows eliminate traditional costs while saving valuable staff time.
+                </p>
+                <CostSavingsChart 
+                  costSavings={reportData.cost_savings} 
+                  timeSavedHours={reportData.time_saved_hours} 
+                />
+              </div>
+            </div>
+          </Card>
+        </div>
 
         {/* Footer */}
-        <div className="mt-12 pt-8 border-t border-slate-200">
+        <div className="bg-slate-50 px-6 py-4 border-t border-slate-200">
           <div className="text-center">
             <p className="text-slate-600 text-sm">
               Generated by Guardify • Child Advocacy Center Technology Platform
