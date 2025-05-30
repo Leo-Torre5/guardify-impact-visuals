@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -102,16 +101,13 @@ const ImpactReport = () => {
       {/* Sidebar */}
       <div className={`${sidebarOpen ? 'w-64' : 'w-16'} transition-all duration-300 bg-slate-900 border-r border-slate-200 flex flex-col`}>
         {/* Header */}
-        <div className="h-16 flex items-center px-4 border-b border-slate-700">
-          <div className="flex items-center gap-3">
+        <div className="h-16 flex items-center justify-center px-4 border-b border-slate-700">
+          <div className="flex items-center">
             <img 
               src="/lovable-uploads/e1111ea8-8945-4c8f-9650-3ca0866a27a7.png" 
               alt="Guardify Logo" 
-              className="w-8 h-8 object-contain"
+              className="w-12 h-12 object-contain"
             />
-            {sidebarOpen && (
-              <div className="text-white font-semibold text-lg">Guardify</div>
-            )}
           </div>
           <button 
             onClick={() => setSidebarOpen(!sidebarOpen)}
