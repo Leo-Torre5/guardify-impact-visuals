@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -103,9 +104,11 @@ const ImpactReport = () => {
         {/* Header */}
         <div className="h-16 flex items-center px-4 border-b border-slate-700">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-400 via-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
-              <Shield className="w-5 h-5 text-white" />
-            </div>
+            <img 
+              src="/lovable-uploads/e1111ea8-8945-4c8f-9650-3ca0866a27a7.png" 
+              alt="Guardify Logo" 
+              className="w-8 h-8 object-contain"
+            />
             {sidebarOpen && (
               <div className="text-white font-semibold text-lg">Guardify</div>
             )}
