@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Users } from 'lucide-react';
 
 interface AgeDistributionChartProps {
   data: {
@@ -13,38 +14,37 @@ interface AgeDistributionChartProps {
 
 const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data }) => {
   const ageGroups = Object.entries(data).map(([age, percentage]) => ({
-    age,
-    percentage,
-    count: Math.round(percentage * 10) // Mock count for display
+    age: `${age} years`,
+    percentage
   }));
 
   const maxPercentage = Math.max(...ageGroups.map(group => group.percentage));
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-5 gap-4">
-        {ageGroups.map((group, index) => {
-          const height = (group.percentage / maxPercentage) * 200;
-          return (
-            <div key={index} className="flex flex-col items-center">
-              <div className="w-full bg-slate-200 rounded-t-lg relative overflow-hidden mb-3" style={{ height: '200px' }}>
-                <div
-                  className="bg-gradient-to-t from-pink-500 to-pink-400 w-full rounded-t-lg transition-all duration-1000 ease-out flex items-end justify-center pb-2 absolute bottom-0"
-                  style={{ height: `${height}px` }}
-                >
-                  <span className="text-white text-xs font-medium">{group.percentage}%</span>
-                </div>
+    <div className="space-y-4">
+      {ageGroups.map((group, index) => {
+        const width = (group.percentage / maxPercentage) * 100;
+        
+        return (
+          <div key={index} className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Users className="w-5 h-5 text-slate-600" />
+                <span className="text-sm font-medium text-slate-700 font-poppins">{group.age}</span>
               </div>
-              <div className="text-center">
-                <div className="text-sm font-medium text-slate-700">{group.age}</div>
-                <div className="text-xs text-slate-500">years</div>
-              </div>
+              <span className="text-sm text-slate-600 font-poppins">{group.percentage}%</span>
             </div>
-          );
-        })}
-      </div>
-      <div className="text-center">
-        <div className="text-sm text-slate-600">
+            <div className="w-full bg-slate-200 rounded-full h-3">
+              <div
+                className="h-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-400 transition-all duration-1000 ease-out"
+                style={{ width: `${width}%` }}
+              />
+            </div>
+          </div>
+        );
+      })}
+      <div className="text-center mt-6">
+        <div className="text-sm text-slate-600 font-poppins">
           Age distribution based on interview metadata from forensic interviews
         </div>
       </div>

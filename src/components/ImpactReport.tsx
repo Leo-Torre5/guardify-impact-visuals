@@ -97,15 +97,15 @@ const ImpactReport = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 flex font-['Poppins',sans-serif]">
+    <div className="min-h-screen bg-slate-50 flex font-poppins">
       {/* Sidebar */}
       <div className={`${sidebarOpen ? 'w-64' : 'w-16'} transition-all duration-300 bg-slate-900 border-r border-slate-200 flex flex-col`}>
         {/* Header */}
-        <div className="h-20 flex items-center justify-center px-2 border-b border-slate-700">
+        <div className="h-20 flex items-center justify-center px-4 border-b border-slate-700 relative">
           <img 
             src="/lovable-uploads/e1111ea8-8945-4c8f-9650-3ca0866a27a7.png" 
-            alt="Guardify Logo" 
-            className={`${sidebarOpen ? 'w-full h-16' : 'w-12 h-12'} object-contain transition-all duration-300`}
+            alt="Logo" 
+            className="w-full h-12 object-contain"
           />
           <button 
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -118,7 +118,7 @@ const ImpactReport = () => {
         {/* Subtitle */}
         {sidebarOpen && (
           <div className="px-4 py-2 border-b border-slate-700">
-            <div className="text-xs text-slate-400 uppercase tracking-wide font-['Poppins',sans-serif]">Reports & Analytics</div>
+            <div className="text-xs text-slate-400 uppercase tracking-wide font-poppins">Reports & Analytics</div>
           </div>
         )}
 
@@ -127,9 +127,9 @@ const ImpactReport = () => {
           {sidebarItems.map((item, index) => (
             <div
               key={index}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-['Poppins',sans-serif] ${
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-poppins ${
                 item.active 
-                  ? 'bg-blue-600 text-white' 
+                  ? 'bg-guardify-navy-blue text-white' 
                   : 'text-slate-300 hover:bg-slate-800 hover:text-white'
               }`}
             >
@@ -144,7 +144,7 @@ const ImpactReport = () => {
         {/* User section */}
         {sidebarOpen && (
           <div className="p-4 border-t border-slate-700">
-            <div className="text-xs text-slate-400 font-['Poppins',sans-serif]">leo.t@guardify.com</div>
+            <div className="text-xs text-slate-400 font-poppins">leo.t@guardify.com</div>
           </div>
         )}
       </div>
@@ -155,15 +155,15 @@ const ImpactReport = () => {
         <div className="bg-white border-b border-slate-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-slate-800 font-['Poppins',sans-serif]">Impact Report</h1>
-              <p className="text-slate-600 mt-1 font-['Poppins',sans-serif]">Forwarding the Mission of Child Protection • Q4 2024</p>
+              <h1 className="text-2xl font-semibold text-slate-800 font-poppins">Impact Report</h1>
+              <p className="text-slate-600 mt-1 font-poppins">Forwarding the Mission of Child Protection • Q4 2024</p>
             </div>
             <div className="flex gap-3">
-              <Button variant="outline" className="flex items-center gap-2 font-['Poppins',sans-serif]">
+              <Button variant="outline" className="flex items-center gap-2 font-poppins border-guardify-navy-blue text-guardify-navy-blue hover:bg-guardify-navy-blue hover:text-white">
                 <Share2 className="w-4 h-4" />
                 Share Report
               </Button>
-              <Button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 font-['Poppins',sans-serif]">
+              <Button className="flex items-center gap-2 bg-guardify-navy-blue hover:bg-guardify-blue font-poppins">
                 <Download className="w-4 h-4" />
                 Download PDF
               </Button>
@@ -172,12 +172,12 @@ const ImpactReport = () => {
         </div>
 
         {/* Mission Statement */}
-        <div className="px-6 py-8 bg-gradient-to-r from-blue-50 to-purple-50">
+        <div className="px-6 py-8 bg-gradient-to-r from-guardify-blue-light to-guardify-purple-light">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-slate-800 mb-3 font-['Poppins',sans-serif]">
+            <h2 className="text-2xl font-bold text-slate-800 mb-3 font-poppins">
               Accelerate your investigations with Evidence Intelligence Tools
             </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto font-['Poppins',sans-serif]">
+            <p className="text-slate-600 max-w-2xl mx-auto font-poppins">
               Help you uncover facts, protect sensitive information, and extract critical insights from evidence files through secure technology and collaborative tools.
             </p>
           </div>
@@ -192,24 +192,24 @@ const ImpactReport = () => {
           {/* Interview Activity with Filter */}
           <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <FileText className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 bg-guardify-blue-light rounded-xl flex items-center justify-center flex-shrink-0">
+                <FileText className="w-6 h-6 text-guardify-blue" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-xl font-semibold text-slate-800 mb-2 font-['Poppins',sans-serif]">Interview Activity</h3>
-                    <p className="text-slate-600 font-['Poppins',sans-serif]">
+                    <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Interview Activity</h3>
+                    <p className="text-slate-600 font-poppins">
                       Your team securely logged interviews every month—ensuring consistent chain of custody and data availability.
                     </p>
                   </div>
                   <Select value={viewFilter} onValueChange={setViewFilter}>
-                    <SelectTrigger className="w-48 font-['Poppins',sans-serif]">
+                    <SelectTrigger className="w-48 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue">
                       <SelectValue placeholder="Select view" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="my-cac">My CAC</SelectItem>
-                      <SelectItem value="nationwide">Nationwide</SelectItem>
+                    <SelectContent className="bg-white border-guardify-navy-blue">
+                      <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue">My CAC</SelectItem>
+                      <SelectItem value="nationwide" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue">Nationwide</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -221,12 +221,12 @@ const ImpactReport = () => {
           {/* Age Distribution */}
           <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Baby className="w-6 h-6 text-purple-600" />
+              <div className="w-12 h-12 bg-guardify-purple-light rounded-xl flex items-center justify-center flex-shrink-0">
+                <Baby className="w-6 h-6 text-guardify-purple" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-['Poppins',sans-serif]">Age Distribution of Interviewed Survivors</h3>
-                <p className="text-slate-600 mb-6 font-['Poppins',sans-serif]">
+                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Age Distribution of Interviewed Survivors</h3>
+                <p className="text-slate-600 mb-6 font-poppins">
                   Understanding age patterns helps tailor appropriate support services and interview approaches.
                 </p>
                 <AgeDistributionChart data={reportData.age_distribution} />
@@ -237,12 +237,12 @@ const ImpactReport = () => {
           {/* Regional Reach */}
           <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Building className="w-6 h-6 text-teal-600" />
+              <div className="w-12 h-12 bg-guardify-teal-light rounded-xl flex items-center justify-center flex-shrink-0">
+                <Building className="w-6 h-6 text-guardify-teal" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-['Poppins',sans-serif]">Regional Reach</h3>
-                <p className="text-slate-600 mb-6 font-['Poppins',sans-serif]">
+                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Regional Reach</h3>
+                <p className="text-slate-600 mb-6 font-poppins">
                   Guardify's impact spans across regions, supporting Child Advocacy Centers nationwide.
                 </p>
                 <RegionalReachChart />
@@ -253,12 +253,12 @@ const ImpactReport = () => {
           {/* Agency Engagement */}
           <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Users className="w-6 h-6 text-indigo-600" />
+              <div className="w-12 h-12 bg-guardify-blue-light rounded-xl flex items-center justify-center flex-shrink-0">
+                <Users className="w-6 h-6 text-guardify-blue" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-['Poppins',sans-serif]">Agencies Engaged Across MDT</h3>
-                <p className="text-slate-600 mb-6 font-['Poppins',sans-serif]">
+                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Agencies Engaged Across MDT</h3>
+                <p className="text-slate-600 mb-6 font-poppins">
                   Multi-disciplinary team collaboration ensures comprehensive support for each case.
                 </p>
                 <AgencyEngagementChart data={reportData.agency_engagement} />
@@ -269,12 +269,12 @@ const ImpactReport = () => {
           {/* Cost Savings */}
           <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Clock className="w-6 h-6 text-teal-600" />
+              <div className="w-12 h-12 bg-guardify-teal-light rounded-xl flex items-center justify-center flex-shrink-0">
+                <Clock className="w-6 h-6 text-guardify-teal" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-['Poppins',sans-serif]">Quantified Savings & Time Saved</h3>
-                <p className="text-slate-600 mb-6 font-['Poppins',sans-serif]">
+                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Quantified Savings & Time Saved</h3>
+                <p className="text-slate-600 mb-6 font-poppins">
                   Digital workflows eliminate traditional costs while saving valuable staff time.
                 </p>
                 <CostSavingsChart 
@@ -289,7 +289,7 @@ const ImpactReport = () => {
         {/* Footer */}
         <div className="bg-slate-50 px-6 py-4 border-t border-slate-200">
           <div className="text-center">
-            <p className="text-slate-600 text-sm font-['Poppins',sans-serif]">
+            <p className="text-slate-600 text-sm font-poppins">
               Generated by Guardify • Child Advocacy Center Technology Platform
             </p>
           </div>
