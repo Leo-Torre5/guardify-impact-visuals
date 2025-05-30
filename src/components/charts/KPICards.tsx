@@ -42,9 +42,9 @@ const KPICards: React.FC<KPICardsProps> = ({ data }) => {
       title: "Agencies Using Guardify",
       value: data.agencies_using.toLocaleString(),
       icon: Globe,
-      color: "bg-emerald-100 text-emerald-600",
-      bgColor: "bg-gradient-to-br from-emerald-50 to-emerald-100",
-      border: "border-emerald-200"
+      color: "bg-teal-100 text-teal-600",
+      bgColor: "bg-gradient-to-br from-teal-50 to-teal-100",
+      border: "border-teal-200"
     }
   ];
 
@@ -57,8 +57,8 @@ const KPICards: React.FC<KPICardsProps> = ({ data }) => {
               <kpi.icon className="w-6 h-6" />
             </div>
             <div className="flex-1">
-              <div className="text-2xl font-bold text-slate-800">{kpi.value}</div>
-              <div className="text-sm text-slate-600 font-medium">{kpi.title}</div>
+              <div className="text-2xl font-bold text-slate-800 font-poppins">{kpi.value}</div>
+              <div className="text-sm text-slate-600 font-medium font-poppins">{kpi.title}</div>
             </div>
           </div>
         </Card>

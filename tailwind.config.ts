@@ -19,6 +19,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['Poppins', 'sans-serif'],
+				poppins: ['Poppins', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -64,11 +68,15 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				guardify: {
-					purple: '#6C3EFF',
+					purple: '#9B59B6',
 					'purple-light': '#F4F1FA',
-					'purple-dark': '#5A32CC',
-					blue: '#4264FB',
-					'blue-light': '#EDF2FF',
+					'purple-dark': '#8E44AD',
+					blue: '#2563EB',
+					'blue-light': '#DBEAFE',
+					'blue-dark': '#1D4ED8',
+					'navy-blue': '#1E3A8A',
+					teal: '#0891B2',
+					'teal-light': '#CFFAFE',
 					grey: '#EAEAEA',
 					'grey-light': '#F8F9FA',
 					'grey-dark': '#3E3E3E',
