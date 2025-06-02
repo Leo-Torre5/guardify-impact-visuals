@@ -138,17 +138,17 @@ const InteractiveUSMap: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Filter and Legend */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-50">
         <Select value={selectedState} onValueChange={setSelectedState}>
-          <SelectTrigger className="w-64 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue">
+          <SelectTrigger className="w-64 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue">
             <SelectValue placeholder="Select state" />
           </SelectTrigger>
-          <SelectContent className="bg-white border-guardify-navy-blue max-h-60">
+          <SelectContent className="bg-white border-guardify-navy-blue max-h-60 z-[9999]">
             {states.map((state) => (
               <SelectItem 
                 key={state} 
                 value={state} 
-                className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue"
+                className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue"
               >
                 {state}
               </SelectItem>
@@ -174,7 +174,7 @@ const InteractiveUSMap: React.FC = () => {
       </div>
 
       {/* Map */}
-      <div className="h-96 rounded-xl overflow-hidden shadow-lg border border-slate-200">
+      <div className="h-96 rounded-xl overflow-hidden shadow-lg border border-slate-200 relative z-10">
         <MapContainer
           key={`${mapBounds.center[0]}-${mapBounds.center[1]}-${mapBounds.zoom}`}
           center={mapBounds.center}

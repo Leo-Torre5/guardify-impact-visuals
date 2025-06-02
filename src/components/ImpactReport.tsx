@@ -203,15 +203,17 @@ const ImpactReport = () => {
                       Your team securely logged interviews every month—ensuring consistent chain of custody and data availability.
                     </p>
                   </div>
-                  <Select value={viewFilter} onValueChange={setViewFilter}>
-                    <SelectTrigger className="w-48 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue">
-                      <SelectValue placeholder="Select view" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border-guardify-navy-blue">
-                      <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue">My CAC</SelectItem>
-                      <SelectItem value="nationwide" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue">Nationwide</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="relative z-50">
+                    <Select value={viewFilter} onValueChange={setViewFilter}>
+                      <SelectTrigger className="w-48 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue">
+                        <SelectValue placeholder="Select view" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border-guardify-navy-blue z-[9999]">
+                        <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">My CAC</SelectItem>
+                        <SelectItem value="nationwide" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">Nationwide</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
                 <InterviewsChart data={reportData.interviews_uploaded_by_month} />
               </div>
