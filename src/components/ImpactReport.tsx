@@ -36,7 +36,7 @@ import AgencyEngagementChart from './charts/AgencyEngagementChart';
 import CostSavingsChart from './charts/CostSavingsChart';
 
 const ImpactReport = () => {
-  const [viewFilter, setViewFilter] = useState("my-cac");
+  const [viewFilter, setViewFilter] = useState("nationwide");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const reportData = {
@@ -46,13 +46,22 @@ const ImpactReport = () => {
       individual_users: 12850,
       agencies_using: 3200
     },
-    interviews_uploaded_by_month: [
-      {"month": "2024-06", "count": 230},
-      {"month": "2024-07", "count": 275},
-      {"month": "2024-08", "count": 245},
-      {"month": "2024-09", "count": 190},
-      {"month": "2024-10", "count": 230}
-    ],
+    interviews_uploaded_by_month: {
+      my_cac: [
+        {"month": "2024-06", "count": 23},
+        {"month": "2024-07", "count": 27},
+        {"month": "2024-08", "count": 24},
+        {"month": "2024-09", "count": 19},
+        {"month": "2024-10", "count": 23}
+      ],
+      nationwide: [
+        {"month": "2024-06", "count": 2300},
+        {"month": "2024-07", "count": 2750},
+        {"month": "2024-08", "count": 2450},
+        {"month": "2024-09", "count": 1900},
+        {"month": "2024-10", "count": 2300}
+      ]
+    },
     avg_video_duration_mins: 42,
     active_interviews: 18200,
     archived_interviews: 5200,
@@ -95,6 +104,12 @@ const ImpactReport = () => {
     { name: "Regional Reports", icon: MapPin, active: false },
     { name: "State Reports", icon: Flag, active: false },
   ];
+
+  const getCurrentInterviewData = () => {
+    return viewFilter === 'my-cac' 
+      ? reportData.interviews_uploaded_by_month.my_cac 
+      : reportData.interviews_uploaded_by_month.nationwide;
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 flex font-poppins">
@@ -200,7 +215,10 @@ const ImpactReport = () => {
                   <div>
                     <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Interview Activity</h3>
                     <p className="text-slate-600 font-poppins">
-                      Your team securely logged interviews every month—ensuring consistent chain of custody and data availability.
+                      {viewFilter === 'nationwide' 
+                        ? 'CACs nationwide securely logged interviews every month—ensuring consistent chain of custody and data availability.'
+                        : 'Your team securely logged interviews every month—ensuring consistent chain of custody and data availability.'
+                      }
                     </p>
                   </div>
                   <div className="relative z-50">
@@ -209,13 +227,13 @@ const ImpactReport = () => {
                         <SelectValue placeholder="Select view" />
                       </SelectTrigger>
                       <SelectContent className="bg-white border-guardify-navy-blue z-[9999]">
-                        <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">My CAC</SelectItem>
                         <SelectItem value="nationwide" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">Nationwide</SelectItem>
+                        <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">My CAC</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
-                <InterviewsChart data={reportData.interviews_uploaded_by_month} />
+                <InterviewsChart data={getCurrentInterviewData()} viewType={viewFilter} />
               </div>
             </div>
           </Card>

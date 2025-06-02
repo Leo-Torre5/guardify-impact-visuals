@@ -6,9 +6,10 @@ interface InterviewsChartProps {
     month: string;
     count: number;
   }>;
+  viewType: string;
 }
 
-const InterviewsChart: React.FC<InterviewsChartProps> = ({ data }) => {
+const InterviewsChart: React.FC<InterviewsChartProps> = ({ data, viewType }) => {
   const maxCount = Math.max(...data.map(d => d.count));
   
   const formatMonth = (monthStr: string) => {
@@ -17,16 +18,27 @@ const InterviewsChart: React.FC<InterviewsChartProps> = ({ data }) => {
     return date.toLocaleDateString('en-US', { month: 'short' });
   };
 
+  const getYear = (monthStr: string) => {
+    const [year] = monthStr.split('-');
+    return year;
+  };
+
+  const currentYear = data.length > 0 ? getYear(data[0].month) : '2024';
+
   return (
     <div className="space-y-4">
       <div className="flex items-end justify-between h-48 gap-2">
         {data.map((item, index) => {
           const height = (item.count / maxCount) * 100;
+          const barColor = viewType === 'nationwide' 
+            ? 'bg-gradient-to-t from-guardify-blue to-guardify-blue-dark' 
+            : 'bg-gradient-to-t from-indigo-500 to-indigo-400';
+          
           return (
             <div key={index} className="flex flex-col items-center flex-1">
               <div className="w-full bg-slate-200 rounded-t-lg relative overflow-hidden">
                 <div
-                  className="bg-gradient-to-t from-indigo-500 to-indigo-400 w-full rounded-t-lg transition-all duration-1000 ease-out flex items-end justify-center pb-2"
+                  className={`${barColor} w-full rounded-t-lg transition-all duration-1000 ease-out flex items-end justify-center pb-2`}
                   style={{ height: `${height}%`, minHeight: '40px' }}
                 >
                   <span className="text-white text-xs font-medium">{item.count}</span>
@@ -39,7 +51,7 @@ const InterviewsChart: React.FC<InterviewsChartProps> = ({ data }) => {
       </div>
       <div className="text-center">
         <div className="text-sm text-slate-600">
-          Monthly interview uploads showing consistent activity
+          Monthly interview uploads for {currentYear} - {viewType === 'nationwide' ? 'All CACs nationwide' : 'Your CAC only'}
         </div>
       </div>
     </div>
