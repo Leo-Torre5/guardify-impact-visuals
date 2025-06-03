@@ -268,7 +268,7 @@ const ImpactReport = () => {
               </div>
             </Card>
 
-            {/* Videos Uploaded */}
+            {/* Uploaded Video Interviews */}
             <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
               <div className="flex items-start gap-6">
                 <div className="w-12 h-12 bg-guardify-teal-light rounded-xl flex items-center justify-center flex-shrink-0">
@@ -277,7 +277,7 @@ const ImpactReport = () => {
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Videos Uploaded</h3>
+                      <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Uploaded Video Interviews</h3>
                       <p className="text-slate-600 font-poppins text-sm">
                         {uploadViewFilter === 'nationwide' 
                           ? 'Video evidence uploaded to secure platform monthly.'
@@ -303,50 +303,53 @@ const ImpactReport = () => {
             </Card>
           </div>
 
-          {/* Age Distribution */}
-          <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-            <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-guardify-purple-light rounded-xl flex items-center justify-center flex-shrink-0">
-                <Baby className="w-6 h-6 text-guardify-purple" />
+          {/* Age Distribution and Agency Engagement - Side by Side */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Age Distribution */}
+            <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
+              <div className="flex items-start gap-6">
+                <div className="w-12 h-12 bg-guardify-purple-light rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Baby className="w-6 h-6 text-guardify-purple" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Age Distribution of Interviewed Survivors</h3>
+                  <p className="text-slate-600 mb-6 font-poppins">
+                    Understanding age patterns helps tailor appropriate support services and interview approaches.
+                  </p>
+                  <AgeDistributionChart data={reportData.age_distribution} />
+                </div>
               </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Age Distribution of Interviewed Survivors</h3>
-                <p className="text-slate-600 mb-6 font-poppins">
-                  Understanding age patterns helps tailor appropriate support services and interview approaches.
-                </p>
-                <AgeDistributionChart data={reportData.age_distribution} />
-              </div>
-            </div>
-          </Card>
+            </Card>
 
-          {/* Regional Reach */}
+            {/* Agency Engagement */}
+            <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
+              <div className="flex items-start gap-6">
+                <div className="w-12 h-12 bg-guardify-blue-light rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Users className="w-6 h-6 text-guardify-blue" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Agencies Engaged Across MDT</h3>
+                  <p className="text-slate-600 mb-6 font-poppins">
+                    Multi-disciplinary team collaboration ensures comprehensive support for each case.
+                  </p>
+                  <AgencyEngagementChart data={reportData.agency_engagement} />
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          {/* Partner Coverage Map */}
           <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
             <div className="flex items-start gap-6">
               <div className="w-12 h-12 bg-guardify-teal-light rounded-xl flex items-center justify-center flex-shrink-0">
                 <Building className="w-6 h-6 text-guardify-teal" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Regional Reach</h3>
+                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Partner Coverage Map</h3>
                 <p className="text-slate-600 mb-6 font-poppins">
                   Guardify's impact spans across regions, supporting Child Advocacy Centers nationwide.
                 </p>
                 <RegionalReachChart />
-              </div>
-            </div>
-          </Card>
-
-          {/* Agency Engagement */}
-          <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-            <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-guardify-blue-light rounded-xl flex items-center justify-center flex-shrink-0">
-                <Users className="w-6 h-6 text-guardify-blue" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Agencies Engaged Across MDT</h3>
-                <p className="text-slate-600 mb-6 font-poppins">
-                  Multi-disciplinary team collaboration ensures comprehensive support for each case.
-                </p>
-                <AgencyEngagementChart data={reportData.agency_engagement} />
               </div>
             </div>
           </Card>

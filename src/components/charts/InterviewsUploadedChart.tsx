@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface InterviewsUploadedChartProps {
   data: Array<{
@@ -10,52 +11,83 @@ interface InterviewsUploadedChartProps {
 }
 
 const InterviewsUploadedChart: React.FC<InterviewsUploadedChartProps> = ({ data, viewType }) => {
-  const maxCount = Math.max(...data.map(d => d.count));
-  
   const formatMonth = (monthStr: string) => {
     const [year, month] = monthStr.split('-');
     const date = new Date(parseInt(year), parseInt(month) - 1);
     return date.toLocaleDateString('en-US', { month: 'short' });
   };
 
-  const getYear = (monthStr: string) => {
-    const [year] = monthStr.split('-');
-    return year;
+  const total2025 = data.reduce((sum, item) => sum + item.count, 0);
+  const cumulativeTotal = viewType === 'nationwide' ? 98500 : 1240; // Mock cumulative data
+
+  const chartData = data.map(item => ({
+    ...item,
+    formattedMonth: formatMonth(item.month)
+  }));
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-3 rounded-lg shadow-lg border border-slate-200">
+          <p className="font-poppins font-semibold text-slate-800">{label}</p>
+          <p className="font-poppins text-guardify-teal">
+            Videos: {payload[0].value.toLocaleString()}
+          </p>
+        </div>
+      );
+    }
+    return null;
   };
 
-  const currentYear = data.length > 0 ? getYear(data[0].month) : '2025';
-
   return (
-    <div className="space-y-4">
-      <div className="flex items-end justify-between h-48 gap-2">
-        {data.map((item, index) => {
-          const height = (item.count / maxCount) * 100;
-          const barColor = viewType === 'nationwide' 
-            ? 'bg-gradient-to-t from-guardify-teal to-teal-400' 
-            : 'bg-gradient-to-t from-emerald-500 to-emerald-400';
-          
-          return (
-            <div key={index} className="flex flex-col items-center flex-1">
-              <div className="w-full bg-slate-200 rounded-t-lg relative overflow-hidden">
-                <div
-                  className={`${barColor} w-full rounded-t-lg transition-all duration-1000 ease-out flex items-end justify-center pb-2 animate-fade-in`}
-                  style={{ 
-                    height: `${height}%`, 
-                    minHeight: '40px',
-                    animationDelay: `${index * 200}ms`
-                  }}
-                >
-                  <span className="text-white text-xs font-medium">{item.count}</span>
-                </div>
-              </div>
-              <div className="text-xs text-slate-600 mt-2">{formatMonth(item.month)}</div>
-            </div>
-          );
-        })}
+    <div className="flex gap-8">
+      <div className="flex-1">
+        <div className="h-48">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+              <XAxis 
+                dataKey="formattedMonth" 
+                axisLine={false}
+                tickLine={false}
+                className="text-sm text-slate-600 font-poppins"
+              />
+              <YAxis hide />
+              <Tooltip content={<CustomTooltip />} />
+              <Line 
+                type="monotone" 
+                dataKey="count" 
+                stroke="#0891B2" 
+                strokeWidth={3}
+                dot={{ fill: '#0891B2', strokeWidth: 2, r: 6 }}
+                activeDot={{ r: 8, fill: '#0891B2' }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="text-center mt-4">
+          <div className="text-sm text-slate-600 font-poppins">
+            Monthly video uploads for 2025 - {viewType === 'nationwide' ? 'All CACs nationwide' : 'Your CAC only'}
+          </div>
+        </div>
       </div>
-      <div className="text-center">
-        <div className="text-sm text-slate-600">
-          Monthly video uploads for {currentYear} - {viewType === 'nationwide' ? 'All CACs nationwide' : 'Your CAC only'}
+      
+      <div className="w-48 flex flex-col justify-center space-y-6">
+        <div className="text-center">
+          <div className="text-3xl font-bold text-guardify-teal font-poppins mb-1">
+            {total2025.toLocaleString()}
+          </div>
+          <div className="text-sm text-slate-600 font-poppins">
+            Total 2025 Uploads
+          </div>
+        </div>
+        
+        <div className="text-center">
+          <div className="text-2xl font-bold text-slate-700 font-poppins mb-1">
+            {cumulativeTotal.toLocaleString()}
+          </div>
+          <div className="text-sm text-slate-600 font-poppins">
+            Cumulative Total
+          </div>
         </div>
       </div>
     </div>
