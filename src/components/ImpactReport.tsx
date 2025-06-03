@@ -28,6 +28,7 @@ import SecureEvidenceChart from './charts/SecureEvidenceChart';
 import MDTCollaborationChart from './charts/MDTCollaborationChart';
 import TimeSavedChart from './charts/TimeSavedChart';
 import InterviewsChart from './charts/InterviewsChart';
+import InterviewsUploadedChart from './charts/InterviewsUploadedChart';
 import LawEnforcementSavings from './charts/LawEnforcementSavings';
 import KPICards from './charts/KPICards';
 import AgeDistributionChart from './charts/AgeDistributionChart';
@@ -37,6 +38,7 @@ import CostSavingsChart from './charts/CostSavingsChart';
 
 const ImpactReport = () => {
   const [viewFilter, setViewFilter] = useState("nationwide");
+  const [uploadViewFilter, setUploadViewFilter] = useState("nationwide");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const reportData = {
@@ -48,18 +50,38 @@ const ImpactReport = () => {
     },
     interviews_uploaded_by_month: {
       my_cac: [
-        {"month": "2024-06", "count": 23},
-        {"month": "2024-07", "count": 27},
-        {"month": "2024-08", "count": 24},
-        {"month": "2024-09", "count": 19},
-        {"month": "2024-10", "count": 23}
+        {"month": "2025-01", "count": 28},
+        {"month": "2025-02", "count": 32},
+        {"month": "2025-03", "count": 29},
+        {"month": "2025-04", "count": 35},
+        {"month": "2025-05", "count": 31},
+        {"month": "2025-06", "count": 27}
       ],
       nationwide: [
-        {"month": "2024-06", "count": 2300},
-        {"month": "2024-07", "count": 2750},
-        {"month": "2024-08", "count": 2450},
-        {"month": "2024-09", "count": 1900},
-        {"month": "2024-10", "count": 2300}
+        {"month": "2025-01", "count": 2800},
+        {"month": "2025-02", "count": 3200},
+        {"month": "2025-03", "count": 2900},
+        {"month": "2025-04", "count": 3500},
+        {"month": "2025-05", "count": 3100},
+        {"month": "2025-06", "count": 2700}
+      ]
+    },
+    videos_uploaded_by_month: {
+      my_cac: [
+        {"month": "2025-01", "count": 145},
+        {"month": "2025-02", "count": 168},
+        {"month": "2025-03", "count": 152},
+        {"month": "2025-04", "count": 189},
+        {"month": "2025-05", "count": 174},
+        {"month": "2025-06", "count": 161}
+      ],
+      nationwide: [
+        {"month": "2025-01", "count": 14500},
+        {"month": "2025-02", "count": 16800},
+        {"month": "2025-03", "count": 15200},
+        {"month": "2025-04", "count": 18900},
+        {"month": "2025-05", "count": 17400},
+        {"month": "2025-06", "count": 16100}
       ]
     },
     avg_video_duration_mins: 42,
@@ -109,6 +131,12 @@ const ImpactReport = () => {
     return viewFilter === 'my-cac' 
       ? reportData.interviews_uploaded_by_month.my_cac 
       : reportData.interviews_uploaded_by_month.nationwide;
+  };
+
+  const getCurrentUploadData = () => {
+    return uploadViewFilter === 'my-cac' 
+      ? reportData.videos_uploaded_by_month.my_cac 
+      : reportData.videos_uploaded_by_month.nationwide;
   };
 
   return (
@@ -204,39 +232,76 @@ const ImpactReport = () => {
           {/* KPI Cards */}
           <KPICards data={reportData.kpi_metrics} />
 
-          {/* Interview Activity with Filter */}
-          <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-            <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-guardify-blue-light rounded-xl flex items-center justify-center flex-shrink-0">
-                <FileText className="w-6 h-6 text-guardify-blue" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Interview Activity</h3>
-                    <p className="text-slate-600 font-poppins">
-                      {viewFilter === 'nationwide' 
-                        ? 'CACs nationwide securely logged interviews every month—ensuring consistent chain of custody and data availability.'
-                        : 'Your team securely logged interviews every month—ensuring consistent chain of custody and data availability.'
-                      }
-                    </p>
-                  </div>
-                  <div className="relative z-50">
-                    <Select value={viewFilter} onValueChange={setViewFilter}>
-                      <SelectTrigger className="w-48 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue">
-                        <SelectValue placeholder="Select view" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white border-guardify-navy-blue z-[9999]">
-                        <SelectItem value="nationwide" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">Nationwide</SelectItem>
-                        <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">My CAC</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+          {/* Interview Activity and Videos Uploaded - Side by Side */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Interview Activity */}
+            <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
+              <div className="flex items-start gap-6">
+                <div className="w-12 h-12 bg-guardify-blue-light rounded-xl flex items-center justify-center flex-shrink-0">
+                  <FileText className="w-6 h-6 text-guardify-blue" />
                 </div>
-                <InterviewsChart data={getCurrentInterviewData()} viewType={viewFilter} />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Interview Activity</h3>
+                      <p className="text-slate-600 font-poppins text-sm">
+                        {viewFilter === 'nationwide' 
+                          ? 'CACs nationwide securely logged interviews every month.'
+                          : 'Your team securely logged interviews every month.'
+                        }
+                      </p>
+                    </div>
+                    <div className="relative z-50">
+                      <Select value={viewFilter} onValueChange={setViewFilter}>
+                        <SelectTrigger className="w-36 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue text-sm">
+                          <SelectValue placeholder="Select view" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border-guardify-navy-blue z-[9999]">
+                          <SelectItem value="nationwide" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">Nationwide</SelectItem>
+                          <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">My CAC</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <InterviewsChart data={getCurrentInterviewData()} viewType={viewFilter} />
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+
+            {/* Videos Uploaded */}
+            <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
+              <div className="flex items-start gap-6">
+                <div className="w-12 h-12 bg-guardify-teal-light rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Camera className="w-6 h-6 text-guardify-teal" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Videos Uploaded</h3>
+                      <p className="text-slate-600 font-poppins text-sm">
+                        {uploadViewFilter === 'nationwide' 
+                          ? 'Video evidence uploaded to secure platform monthly.'
+                          : 'Your team\'s video uploads to secure platform monthly.'
+                        }
+                      </p>
+                    </div>
+                    <div className="relative z-50">
+                      <Select value={uploadViewFilter} onValueChange={setUploadViewFilter}>
+                        <SelectTrigger className="w-36 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue text-sm">
+                          <SelectValue placeholder="Select view" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border-guardify-navy-blue z-[9999]">
+                          <SelectItem value="nationwide" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">Nationwide</SelectItem>
+                          <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">My CAC</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <InterviewsUploadedChart data={getCurrentUploadData()} viewType={uploadViewFilter} />
+                </div>
+              </div>
+            </Card>
+          </div>
 
           {/* Age Distribution */}
           <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
