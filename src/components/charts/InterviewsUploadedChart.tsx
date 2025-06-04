@@ -72,26 +72,6 @@ const InterviewsUploadedChart: React.FC<InterviewsUploadedChartProps> = ({ data,
 
   return (
     <div className="space-y-6">
-      {/* Filter */}
-      <div className="flex justify-end">
-        <Select value={viewType} onValueChange={onViewTypeChange}>
-          <SelectTrigger className="w-48 font-poppins border-[#191C35] focus:ring-[#191C35] text-[#191C35] text-sm">
-            <SelectValue placeholder="Select region" />
-          </SelectTrigger>
-          <SelectContent className="bg-white border-[#191C35] z-[9999]">
-            {regionOptions.map((option) => (
-              <SelectItem 
-                key={option.value} 
-                value={option.value}
-                className="focus:bg-[#DBEAFE] focus:text-[#191C35] text-[#191C35]"
-              >
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
       {/* Totals positioned horizontally above the graph */}
       <div className="flex justify-center gap-8">
         <div className="text-center">
