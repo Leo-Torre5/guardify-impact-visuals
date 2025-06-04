@@ -236,8 +236,8 @@ const ImpactReport = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Interview Activity */}
             <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-              <div className="flex items-center justify-between mb-6">
-                <div className="text-center flex-1">
+              <div className="flex items-start justify-between mb-6">
+                <div className="text-left flex-1">
                   <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Interview Activity</h3>
                   <p className="text-slate-600 font-poppins text-sm">
                     {viewFilter === 'nationwide' 
@@ -246,7 +246,7 @@ const ImpactReport = () => {
                     }
                   </p>
                 </div>
-                <div className="relative z-50">
+                <div className="relative z-50 ml-4">
                   <Select value={viewFilter} onValueChange={setViewFilter}>
                     <SelectTrigger className="w-36 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue text-sm">
                       <SelectValue placeholder="Select view" />
@@ -263,8 +263,8 @@ const ImpactReport = () => {
 
             {/* Uploaded Video Interviews */}
             <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-              <div className="flex items-center justify-between mb-6">
-                <div className="text-center flex-1">
+              <div className="flex items-start justify-between mb-6">
+                <div className="text-left flex-1">
                   <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Uploaded Video Interviews</h3>
                   <p className="text-slate-600 font-poppins text-sm">
                     {uploadViewFilter === 'nationwide' 
@@ -273,7 +273,7 @@ const ImpactReport = () => {
                     }
                   </p>
                 </div>
-                <div className="relative z-50">
+                <div className="relative z-50 ml-4">
                   <Select value={uploadViewFilter} onValueChange={setUploadViewFilter}>
                     <SelectTrigger className="w-36 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue text-sm">
                       <SelectValue placeholder="Select view" />
@@ -293,7 +293,7 @@ const ImpactReport = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Age Distribution */}
             <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-              <div className="text-center mb-6">
+              <div className="text-left mb-6">
                 <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Age Distribution of Interviewed Survivors</h3>
                 <p className="text-slate-600 font-poppins">
                   Understanding age patterns helps tailor appropriate support services and interview approaches.
@@ -304,7 +304,7 @@ const ImpactReport = () => {
 
             {/* Agency Engagement */}
             <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-              <div className="text-center mb-6">
+              <div className="text-left mb-6">
                 <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Agencies Engaged Across MDT</h3>
                 <p className="text-slate-600 font-poppins">
                   Multi-disciplinary team collaboration ensures comprehensive support for each case.
@@ -316,7 +316,7 @@ const ImpactReport = () => {
 
           {/* Partner Coverage Map */}
           <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-            <div className="text-center mb-6">
+            <div className="text-left mb-6">
               <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Partner Coverage Map</h3>
               <p className="text-slate-600 font-poppins">
                 Guardify's impact spans across regions, supporting Child Advocacy Centers nationwide.
@@ -327,7 +327,7 @@ const ImpactReport = () => {
 
           {/* Cost Savings */}
           <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-            <div className="text-center mb-6">
+            <div className="text-left mb-6">
               <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Quantified Savings & Time Saved</h3>
               <p className="text-slate-600 font-poppins">
                 Digital workflows eliminate traditional costs while saving valuable staff time.
