@@ -40,8 +40,30 @@ const InterviewsUploadedChart: React.FC<InterviewsUploadedChartProps> = ({ data,
   };
 
   return (
-    <div className="flex gap-8">
-      <div className="flex-1">
+    <div className="space-y-6">
+      {/* Totals positioned horizontally above the graph */}
+      <div className="flex justify-center gap-8">
+        <div className="text-center">
+          <div className="text-3xl font-bold text-guardify-teal font-poppins mb-1">
+            {total2025.toLocaleString()}
+          </div>
+          <div className="text-sm text-slate-600 font-poppins">
+            Total 2025 Uploads
+          </div>
+        </div>
+        
+        <div className="text-center">
+          <div className="text-2xl font-bold text-slate-700 font-poppins mb-1">
+            {cumulativeTotal.toLocaleString()}
+          </div>
+          <div className="text-sm text-slate-600 font-poppins">
+            Cumulative Total
+          </div>
+        </div>
+      </div>
+      
+      {/* Line chart taking full width */}
+      <div className="w-full">
         <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
@@ -67,26 +89,6 @@ const InterviewsUploadedChart: React.FC<InterviewsUploadedChartProps> = ({ data,
         <div className="text-center mt-4">
           <div className="text-sm text-slate-600 font-poppins">
             Monthly video uploads for 2025 - {viewType === 'nationwide' ? 'All CACs nationwide' : 'Your CAC only'}
-          </div>
-        </div>
-      </div>
-      
-      <div className="w-48 flex flex-col justify-center space-y-6">
-        <div className="text-center">
-          <div className="text-3xl font-bold text-guardify-teal font-poppins mb-1">
-            {total2025.toLocaleString()}
-          </div>
-          <div className="text-sm text-slate-600 font-poppins">
-            Total 2025 Uploads
-          </div>
-        </div>
-        
-        <div className="text-center">
-          <div className="text-2xl font-bold text-slate-700 font-poppins mb-1">
-            {cumulativeTotal.toLocaleString()}
-          </div>
-          <div className="text-sm text-slate-600 font-poppins">
-            Cumulative Total
           </div>
         </div>
       </div>

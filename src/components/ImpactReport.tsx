@@ -236,70 +236,56 @@ const ImpactReport = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Interview Activity */}
             <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-              <div className="flex items-start gap-6">
-                <div className="w-12 h-12 bg-guardify-blue-light rounded-xl flex items-center justify-center flex-shrink-0">
-                  <FileText className="w-6 h-6 text-guardify-blue" />
+              <div className="flex items-center justify-between mb-6">
+                <div className="text-center flex-1">
+                  <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Interview Activity</h3>
+                  <p className="text-slate-600 font-poppins text-sm">
+                    {viewFilter === 'nationwide' 
+                      ? 'CACs nationwide securely logged interviews every month.'
+                      : 'Your team securely logged interviews every month.'
+                    }
+                  </p>
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Interview Activity</h3>
-                      <p className="text-slate-600 font-poppins text-sm">
-                        {viewFilter === 'nationwide' 
-                          ? 'CACs nationwide securely logged interviews every month.'
-                          : 'Your team securely logged interviews every month.'
-                        }
-                      </p>
-                    </div>
-                    <div className="relative z-50">
-                      <Select value={viewFilter} onValueChange={setViewFilter}>
-                        <SelectTrigger className="w-36 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue text-sm">
-                          <SelectValue placeholder="Select view" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white border-guardify-navy-blue z-[9999]">
-                          <SelectItem value="nationwide" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">Nationwide</SelectItem>
-                          <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">My CAC</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <InterviewsChart data={getCurrentInterviewData()} viewType={viewFilter} />
+                <div className="relative z-50">
+                  <Select value={viewFilter} onValueChange={setViewFilter}>
+                    <SelectTrigger className="w-36 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue text-sm">
+                      <SelectValue placeholder="Select view" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border-guardify-navy-blue z-[9999]">
+                      <SelectItem value="nationwide" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">Nationwide</SelectItem>
+                      <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">My CAC</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
+              <InterviewsChart data={getCurrentInterviewData()} viewType={viewFilter} />
             </Card>
 
             {/* Uploaded Video Interviews */}
             <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-              <div className="flex items-start gap-6">
-                <div className="w-12 h-12 bg-guardify-teal-light rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Camera className="w-6 h-6 text-guardify-teal" />
+              <div className="flex items-center justify-between mb-6">
+                <div className="text-center flex-1">
+                  <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Uploaded Video Interviews</h3>
+                  <p className="text-slate-600 font-poppins text-sm">
+                    {uploadViewFilter === 'nationwide' 
+                      ? 'Video evidence uploaded to secure platform monthly.'
+                      : 'Your team\'s video uploads to secure platform monthly.'
+                    }
+                  </p>
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Uploaded Video Interviews</h3>
-                      <p className="text-slate-600 font-poppins text-sm">
-                        {uploadViewFilter === 'nationwide' 
-                          ? 'Video evidence uploaded to secure platform monthly.'
-                          : 'Your team\'s video uploads to secure platform monthly.'
-                        }
-                      </p>
-                    </div>
-                    <div className="relative z-50">
-                      <Select value={uploadViewFilter} onValueChange={setUploadViewFilter}>
-                        <SelectTrigger className="w-36 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue text-sm">
-                          <SelectValue placeholder="Select view" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white border-guardify-navy-blue z-[9999]">
-                          <SelectItem value="nationwide" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">Nationwide</SelectItem>
-                          <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">My CAC</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <InterviewsUploadedChart data={getCurrentUploadData()} viewType={uploadViewFilter} />
+                <div className="relative z-50">
+                  <Select value={uploadViewFilter} onValueChange={setUploadViewFilter}>
+                    <SelectTrigger className="w-36 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue text-sm">
+                      <SelectValue placeholder="Select view" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border-guardify-navy-blue z-[9999]">
+                      <SelectItem value="nationwide" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">Nationwide</SelectItem>
+                      <SelectItem value="my-cac" className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue">My CAC</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
+              <InterviewsUploadedChart data={getCurrentUploadData()} viewType={uploadViewFilter} />
             </Card>
           </div>
 
@@ -307,70 +293,50 @@ const ImpactReport = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Age Distribution */}
             <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-              <div className="flex items-start gap-6">
-                <div className="w-12 h-12 bg-guardify-purple-light rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Baby className="w-6 h-6 text-guardify-purple" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Age Distribution of Interviewed Survivors</h3>
-                  <p className="text-slate-600 mb-6 font-poppins">
-                    Understanding age patterns helps tailor appropriate support services and interview approaches.
-                  </p>
-                  <AgeDistributionChart data={reportData.age_distribution} />
-                </div>
+              <div className="text-center mb-6">
+                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Age Distribution of Interviewed Survivors</h3>
+                <p className="text-slate-600 font-poppins">
+                  Understanding age patterns helps tailor appropriate support services and interview approaches.
+                </p>
               </div>
+              <AgeDistributionChart data={reportData.age_distribution} />
             </Card>
 
             {/* Agency Engagement */}
             <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-              <div className="flex items-start gap-6">
-                <div className="w-12 h-12 bg-guardify-blue-light rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Users className="w-6 h-6 text-guardify-blue" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Agencies Engaged Across MDT</h3>
-                  <p className="text-slate-600 mb-6 font-poppins">
-                    Multi-disciplinary team collaboration ensures comprehensive support for each case.
-                  </p>
-                  <AgencyEngagementChart data={reportData.agency_engagement} />
-                </div>
+              <div className="text-center mb-6">
+                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Agencies Engaged Across MDT</h3>
+                <p className="text-slate-600 font-poppins">
+                  Multi-disciplinary team collaboration ensures comprehensive support for each case.
+                </p>
               </div>
+              <AgencyEngagementChart data={reportData.agency_engagement} />
             </Card>
           </div>
 
           {/* Partner Coverage Map */}
           <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-            <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-guardify-teal-light rounded-xl flex items-center justify-center flex-shrink-0">
-                <Building className="w-6 h-6 text-guardify-teal" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Partner Coverage Map</h3>
-                <p className="text-slate-600 mb-6 font-poppins">
-                  Guardify's impact spans across regions, supporting Child Advocacy Centers nationwide.
-                </p>
-                <RegionalReachChart />
-              </div>
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Partner Coverage Map</h3>
+              <p className="text-slate-600 font-poppins">
+                Guardify's impact spans across regions, supporting Child Advocacy Centers nationwide.
+              </p>
             </div>
+            <RegionalReachChart />
           </Card>
 
           {/* Cost Savings */}
           <Card className="p-6 bg-white shadow-sm border border-slate-200 rounded-xl">
-            <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-guardify-teal-light rounded-xl flex items-center justify-center flex-shrink-0">
-                <Clock className="w-6 h-6 text-guardify-teal" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Quantified Savings & Time Saved</h3>
-                <p className="text-slate-600 mb-6 font-poppins">
-                  Digital workflows eliminate traditional costs while saving valuable staff time.
-                </p>
-                <CostSavingsChart 
-                  costSavings={reportData.cost_savings} 
-                  timeSavedHours={reportData.time_saved_hours} 
-                />
-              </div>
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-semibold text-slate-800 mb-2 font-poppins">Quantified Savings & Time Saved</h3>
+              <p className="text-slate-600 font-poppins">
+                Digital workflows eliminate traditional costs while saving valuable staff time.
+              </p>
             </div>
+            <CostSavingsChart 
+              costSavings={reportData.cost_savings} 
+              timeSavedHours={reportData.time_saved_hours} 
+            />
           </Card>
         </div>
 
