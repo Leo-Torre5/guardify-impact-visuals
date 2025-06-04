@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface AgeDistributionChartProps {
@@ -49,7 +49,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
     { value: "northwest", label: "Northwest" }
   ];
 
-  // Brand colors
+  // Brand colors matching your guidelines
   const COLORS = [
     '#191C35', // Navy Blue
     '#002169', // True Blue  
@@ -65,7 +65,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
           <p className="font-poppins font-semibold text-[#191C35]">
             {payload[0].payload.name}
           </p>
-          <p className="font-poppins text-[#191C35]">
+          <p className="font-poppins text-[#767676]">
             {payload[0].value}% of survivors
           </p>
         </div>
@@ -74,17 +74,17 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
     return null;
   };
 
-  const CustomLegend = () => {
+  const CustomLegend = ({ payload }: any) => {
     return (
-      <div className="flex flex-col gap-3 justify-center mr-8">
-        {chartData.map((entry, index) => (
+      <div className="flex flex-wrap gap-4 justify-center mt-6">
+        {payload.map((entry: any, index: number) => (
           <div key={index} className="flex items-center gap-2">
             <div 
-              className="w-4 h-4 rounded-full"
-              style={{ backgroundColor: COLORS[index % COLORS.length] }}
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: entry.color }}
             />
-            <span className="text-sm font-poppins text-[#191C35]">
-              {entry.name}
+            <span className="text-sm font-poppins text-[#767676]">
+              {entry.value}: {chartData[index].value}%
             </span>
           </div>
         ))}
@@ -92,53 +92,48 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
     );
   };
 
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value }: any) => {
-    const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text 
-        x={x} 
-        y={y} 
-        fill="white" 
-        textAnchor={x > cx ? 'start' : 'end'} 
-        dominantBaseline="central"
-        className="font-poppins font-semibold text-sm"
-      >
-        {`${value}%`}
-      </text>
-    );
-  };
-
   return (
     <div className="space-y-4">
-      <div className="h-80 flex items-center">
-        <div className="flex-1">
-          <CustomLegend />
-        </div>
-        <div className="flex-1">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={chartData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={renderCustomizedLabel}
-                outerRadius={120}
-                fill="#8884d8"
-                dataKey="value"
+      {/* Filter */}
+      <div className="flex justify-end">
+        <Select value={viewType} onValueChange={onViewTypeChange}>
+          <SelectTrigger className="w-48 font-poppins border-[#191C35] focus:ring-[#191C35] text-[#191C35] text-sm">
+            <SelectValue placeholder="Select region" />
+          </SelectTrigger>
+          <SelectContent className="bg-white border-[#191C35] z-[9999]">
+            {regionOptions.map((option) => (
+              <SelectItem 
+                key={option.value} 
+                value={option.value}
+                className="focus:bg-[#DBEAFE] focus:text-[#191C35] text-[#191C35]"
               >
-                {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="h-80">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={120}
+              paddingAngle={2}
+              dataKey="value"
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip content={<CustomTooltip />} />
+            <Legend content={<CustomLegend />} />
+          </PieChart>
+        </ResponsiveContainer>
       </div>
       <div className="text-center mt-6">
         <div className="text-sm text-[#767676] font-poppins">
