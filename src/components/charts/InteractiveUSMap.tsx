@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -19,7 +20,6 @@ interface MapBounds {
 
 const InteractiveUSMap: React.FC = () => {
   const [selectedState, setSelectedState] = useState<string>('All States');
-  const [selectedRegion, setSelectedRegion] = useState<string>('all-regions');
   const [mapBounds, setMapBounds] = useState<MapBounds>({
     center: [39.8283, -98.5795], // Center of US
     zoom: 4
@@ -81,16 +81,6 @@ const InteractiveUSMap: React.FC = () => {
     'Wyoming': { center: [42.755966, -107.302490], zoom: 7 }
   };
 
-  // Regional groupings
-  const regionStates: Record<string, string[]> = {
-    'northeast': ['Maine', 'New Hampshire', 'Vermont', 'Massachusetts', 'Rhode Island', 'Connecticut', 'New York', 'New Jersey', 'Pennsylvania'],
-    'southeast': ['Delaware', 'Maryland', 'Virginia', 'West Virginia', 'Kentucky', 'Tennessee', 'North Carolina', 'South Carolina', 'Georgia', 'Florida', 'Alabama', 'Mississippi', 'Arkansas', 'Louisiana'],
-    'midwest': ['Ohio', 'Michigan', 'Indiana', 'Wisconsin', 'Illinois', 'Minnesota', 'Iowa', 'Missouri', 'North Dakota', 'South Dakota', 'Nebraska', 'Kansas'],
-    'southwest': ['Texas', 'Oklahoma', 'New Mexico', 'Arizona'],
-    'west': ['Montana', 'Wyoming', 'Colorado', 'Utah', 'Idaho', 'Washington', 'Oregon', 'Nevada', 'California'],
-    'northwest': ['Alaska', 'Hawaii']
-  };
-
   // Generate mock data for all states and territories
   const generateMockData = (): Location[] => {
     const locations: Location[] = [];
@@ -121,118 +111,70 @@ const InteractiveUSMap: React.FC = () => {
 
   const mockLocations = React.useMemo(() => generateMockData(), []);
 
-  // Color mapping for customer types using brand colors
+  // Color mapping for customer types
   const getColorByType = (type: string): string => {
     switch (type) {
       case 'CAC': return '#9B59B6'; // purple
-      case 'Prosecutors': return '#006FA7'; // blue  
-      case 'Law Enforcement': return '#191C35'; // navy blue
-      default: return '#767676'; // gray
+      case 'Prosecutors': return '#3b82f6'; // light blue  
+      case 'Law Enforcement': return '#1e40af'; // dark blue
+      default: return '#6b7280'; // gray
     }
   };
 
-  // Filter locations based on selected state and region
+  // Filter locations based on selected state
   useEffect(() => {
-    let filtered = mockLocations;
-
-    // Filter by region first
-    if (selectedRegion !== 'all-regions') {
-      const statesInRegion = regionStates[selectedRegion] || [];
-      filtered = filtered.filter(loc => statesInRegion.includes(loc.state));
-    }
-
-    // Then filter by specific state if selected
-    if (selectedState !== 'All States') {
-      filtered = filtered.filter(loc => loc.state === selectedState);
-      setMapBounds(stateBounds[selectedState] || { center: [39.8283, -98.5795], zoom: 4 });
-    } else if (selectedRegion !== 'all-regions') {
-      // Set bounds for region
-      const statesInRegion = regionStates[selectedRegion] || [];
-      if (statesInRegion.length > 0) {
-        const regionBounds = statesInRegion.map(state => stateBounds[state]).filter(Boolean);
-        if (regionBounds.length > 0) {
-          const avgLat = regionBounds.reduce((sum, bounds) => sum + bounds.center[0], 0) / regionBounds.length;
-          const avgLng = regionBounds.reduce((sum, bounds) => sum + bounds.center[1], 0) / regionBounds.length;
-          setMapBounds({ center: [avgLat, avgLng], zoom: 5 });
-        }
-      }
-    } else {
+    if (selectedState === 'All States') {
+      setFilteredLocations(mockLocations);
       setMapBounds({ center: [39.8283, -98.5795], zoom: 4 });
+    } else {
+      const stateLocations = mockLocations.filter(loc => loc.state === selectedState);
+      setFilteredLocations(stateLocations);
+      setMapBounds(stateBounds[selectedState] || { center: [39.8283, -98.5795], zoom: 4 });
     }
-
-    setFilteredLocations(filtered);
-  }, [selectedState, selectedRegion, mockLocations]);
+  }, [selectedState, mockLocations]);
 
   const states = ['All States', ...Object.keys(stateBounds).sort()];
-  const regionOptions = [
-    { value: "all-regions", label: "All Regions" },
-    { value: "northeast", label: "Northeast" },
-    { value: "southeast", label: "Southeast" },
-    { value: "midwest", label: "Midwest" },
-    { value: "southwest", label: "Southwest" },
-    { value: "west", label: "West" },
-    { value: "northwest", label: "Northwest" }
-  ];
 
   return (
     <div className="space-y-6">
-      {/* Filters and Legend */}
+      {/* Filter and Legend */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-50">
-        <div className="flex gap-4">
-          <Select value={selectedState} onValueChange={setSelectedState}>
-            <SelectTrigger className="w-64 font-poppins border-[#191C35] focus:ring-[#191C35] text-[#191C35]">
-              <SelectValue placeholder="Select state" />
-            </SelectTrigger>
-            <SelectContent className="bg-white border-[#191C35] max-h-60 z-[9999]">
-              {states.map((state) => (
-                <SelectItem 
-                  key={state} 
-                  value={state} 
-                  className="focus:bg-[#DBEAFE] focus:text-[#191C35] text-[#191C35]"
-                >
-                  {state}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-            <SelectTrigger className="w-48 font-poppins border-[#191C35] focus:ring-[#191C35] text-[#191C35]">
-              <SelectValue placeholder="Select region" />
-            </SelectTrigger>
-            <SelectContent className="bg-white border-[#191C35] z-[9999]">
-              {regionOptions.map((option) => (
-                <SelectItem 
-                  key={option.value} 
-                  value={option.value}
-                  className="focus:bg-[#DBEAFE] focus:text-[#191C35] text-[#191C35]"
-                >
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <Select value={selectedState} onValueChange={setSelectedState}>
+          <SelectTrigger className="w-64 font-poppins border-guardify-navy-blue focus:ring-guardify-navy-blue text-guardify-navy-blue">
+            <SelectValue placeholder="Select state" />
+          </SelectTrigger>
+          <SelectContent className="bg-white border-guardify-navy-blue max-h-60 z-[9999]">
+            {states.map((state) => (
+              <SelectItem 
+                key={state} 
+                value={state} 
+                className="focus:bg-guardify-blue-light focus:text-guardify-navy-blue text-guardify-navy-blue"
+              >
+                {state}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         {/* Legend */}
         <div className="flex gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[#9B59B6]"></div>
-            <span className="text-sm font-poppins text-[#767676]">CAC</span>
+            <div className="w-3 h-3 rounded-full bg-guardify-purple"></div>
+            <span className="text-sm font-poppins text-slate-700">CAC</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[#006FA7]"></div>
-            <span className="text-sm font-poppins text-[#767676]">Prosecutors</span>
+            <div className="w-3 h-3 rounded-full bg-guardify-blue"></div>
+            <span className="text-sm font-poppins text-slate-700">Prosecutors</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[#191C35]"></div>
-            <span className="text-sm font-poppins text-[#767676]">Law Enforcement</span>
+            <div className="w-3 h-3 rounded-full bg-guardify-navy-blue"></div>
+            <span className="text-sm font-poppins text-slate-700">Law Enforcement</span>
           </div>
         </div>
       </div>
 
       {/* Map */}
-      <div className="h-96 rounded-xl overflow-hidden shadow-lg border border-[#F3F3F3] relative z-10">
+      <div className="h-96 rounded-xl overflow-hidden shadow-lg border border-slate-200 relative z-10">
         <MapContainer
           key={`${mapBounds.center[0]}-${mapBounds.center[1]}-${mapBounds.zoom}`}
           center={mapBounds.center}
@@ -258,9 +200,9 @@ const InteractiveUSMap: React.FC = () => {
             >
               <Popup>
                 <div className="font-poppins">
-                  <div className="font-semibold text-[#191C35]">{location.name}</div>
-                  <div className="text-sm text-[#767676]">{location.state}</div>
-                  <div className="text-sm text-[#767676]">{location.type}</div>
+                  <div className="font-semibold text-slate-800">{location.name}</div>
+                  <div className="text-sm text-slate-600">{location.state}</div>
+                  <div className="text-sm text-slate-600">{location.type}</div>
                 </div>
               </Popup>
             </CircleMarker>
@@ -269,10 +211,10 @@ const InteractiveUSMap: React.FC = () => {
       </div>
 
       <div className="text-center">
-        <div className="text-sm text-[#767676] font-poppins">
-          Interactive map showing Guardify usage across {selectedState === 'All States' ? (selectedRegion === 'all-regions' ? 'the United States' : regionOptions.find(r => r.value === selectedRegion)?.label) : selectedState}
-          {(selectedState !== 'All States' || selectedRegion !== 'all-regions') && (
-            <span className="ml-2 text-[#191C35]">
+        <div className="text-sm text-slate-600 font-poppins">
+          Interactive map showing Guardify usage across {selectedState === 'All States' ? 'the United States' : selectedState}
+          {selectedState !== 'All States' && (
+            <span className="ml-2 text-guardify-navy-blue">
               ({filteredLocations.length} locations)
             </span>
           )}
