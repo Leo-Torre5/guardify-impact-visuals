@@ -213,16 +213,14 @@ const ImpactReport = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Interview Activity */}
             <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-              <div className="flex items-start justify-between mb-6">
-                <div className="text-left">
-                  <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Interview Activity</h3>
-                  <p className="text-[#767676] font-poppins text-sm">
-                    {interviewViewFilter === 'nationwide' 
-                      ? 'CACs nationwide securely logged interviews every month.'
-                      : 'Your team securely logged interviews every month.'
-                    }
-                  </p>
-                </div>
+              <div className="text-left mb-6">
+                <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Interview Activity</h3>
+                <p className="text-[#767676] font-poppins text-sm">
+                  {interviewViewFilter === 'nationwide' 
+                    ? 'CACs nationwide securely logged interviews every month.'
+                    : 'Your team securely logged interviews every month.'
+                  }
+                </p>
               </div>
               <InterviewsChart 
                 data={getCurrentInterviewData()} 
@@ -233,16 +231,14 @@ const ImpactReport = () => {
 
             {/* Uploaded Video Interviews */}
             <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-              <div className="flex items-start justify-between mb-6">
-                <div className="text-left">
-                  <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Uploaded Video Interviews</h3>
-                  <p className="text-[#767676] font-poppins text-sm">
-                    {uploadViewFilter === 'nationwide' 
-                      ? 'Video evidence uploaded to secure platform monthly.'
-                      : 'Your team\'s video uploads to secure platform monthly.'
-                    }
-                  </p>
-                </div>
+              <div className="text-left mb-6">
+                <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Uploaded Video Interviews</h3>
+                <p className="text-[#767676] font-poppins text-sm">
+                  {uploadViewFilter === 'nationwide' 
+                    ? 'Video evidence uploaded to secure platform monthly.'
+                    : 'Your team\'s video uploads to secure platform monthly.'
+                  }
+                </p>
               </div>
               <InterviewsUploadedChart 
                 data={getCurrentUploadData()} 
@@ -256,13 +252,11 @@ const ImpactReport = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Age Distribution */}
             <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-              <div className="flex items-start justify-between mb-6">
-                <div className="text-left">
-                  <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Age Distribution of People Interviewed</h3>
-                  <p className="text-[#767676] font-poppins">
-                    Understanding age patterns helps tailor appropriate support services and interview approaches.
-                  </p>
-                </div>
+              <div className="text-left mb-6">
+                <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Age Distribution of Interviewed Survivors</h3>
+                <p className="text-[#767676] font-poppins">
+                  Understanding age patterns helps tailor appropriate support services and interview approaches.
+                </p>
               </div>
               <AgeDistributionChart 
                 data={reportData.age_distribution} 
@@ -296,13 +290,11 @@ const ImpactReport = () => {
 
           {/* Cost Savings */}
           <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-            <div className="flex items-start justify-between mb-6">
-              <div className="text-left">
-                <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Quantified Savings & Time Saved</h3>
-                <p className="text-[#767676] font-poppins">
-                  Digital workflows eliminate traditional costs while saving valuable staff time.
-                </p>
-              </div>
+            <div className="text-left mb-6">
+              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Quantified Savings & Time Saved</h3>
+              <p className="text-[#767676] font-poppins">
+                Digital workflows eliminate traditional costs while saving valuable staff time.
+              </p>
             </div>
             <CostSavingsChart 
               costSavings={reportData.cost_savings} 
