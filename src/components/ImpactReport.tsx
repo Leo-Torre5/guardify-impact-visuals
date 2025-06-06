@@ -1,22 +1,14 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
   Download, 
-  Share2, 
-  Menu,
-  BarChart3,
-  Activity,
-  Eye,
-  MapPin,
-  Flag
+  Share2
 } from 'lucide-react';
 import InterviewsChart from './charts/InterviewsChart';
 import InterviewsUploadedChart from './charts/InterviewsUploadedChart';
 import KPICards from './charts/KPICards';
 import AgeDistributionChart from './charts/AgeDistributionChart';
-import RegionalReachChart from './charts/RegionalReachChart';
 import AgencyEngagementChart from './charts/AgencyEngagementChart';
 import CostSavingsChart from './charts/CostSavingsChart';
 import InteractiveUSMap from './charts/InteractiveUSMap';
@@ -25,7 +17,6 @@ const ImpactReport = () => {
   const [interviewViewFilter, setInterviewViewFilter] = useState("nationwide");
   const [uploadViewFilter, setUploadViewFilter] = useState("nationwide");
   const [ageViewFilter, setAgeViewFilter] = useState("nationwide");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const reportData = {
     kpi_metrics: {
@@ -96,14 +87,6 @@ const ImpactReport = () => {
     time_saved_hours: 204738
   };
 
-  const sidebarItems = [
-    { name: "Impact Report", icon: BarChart3, active: true },
-    { name: "Operational Report", icon: Activity, active: false },
-    { name: "Guardify Insight Report", icon: Eye, active: false },
-    { name: "Regional Reports", icon: MapPin, active: false },
-    { name: "State Reports", icon: Flag, active: false },
-  ];
-
   const getCurrentInterviewData = () => {
     return interviewViewFilter === 'my-cac' 
       ? reportData.interviews_uploaded_by_month.my_cac 
@@ -117,199 +100,145 @@ const ImpactReport = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] flex font-poppins">
-      {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'w-64' : 'w-16'} transition-all duration-300 bg-[#191C35] border-r border-[#F3F3F3] flex flex-col`}>
-        {/* Header */}
-        <div className="h-20 flex items-center justify-center px-4 border-b border-[#767676] relative">
-          <img 
-            src="/lovable-uploads/e1111ea8-8945-4c8f-9650-3ca0866a27a7.png" 
-            alt="Logo" 
-            className="w-full h-12 object-contain"
-          />
-          <button 
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="absolute top-4 right-4 text-[#F3F3F3] hover:text-white"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
+    <div className="bg-[#FAFAFA] min-h-full">
+      {/* Header */}
+      <div className="bg-white border-b border-[#F3F3F3] px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold text-[#191C35] font-poppins">Impact Report</h1>
+            <p className="text-[#767676] mt-1 font-poppins">Forwarding the Mission of Child Protection • Q4 2024</p>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="flex items-center gap-2 font-poppins border-[#191C35] text-[#191C35] hover:bg-[#191C35] hover:text-white">
+              <Share2 className="w-4 h-4" />
+              Share Report
+            </Button>
+            <Button className="flex items-center gap-2 bg-[#191C35] hover:bg-[#002169] font-poppins">
+              <Download className="w-4 h-4" />
+              Download PDF
+            </Button>
+          </div>
         </div>
-
-        {/* Subtitle */}
-        {sidebarOpen && (
-          <div className="px-4 py-2 border-b border-[#767676]">
-            <div className="text-xs text-[#F3F3F3] uppercase tracking-wide font-poppins">Reports & Analytics</div>
-          </div>
-        )}
-
-        {/* Navigation */}
-        <nav className="flex-1 p-2 space-y-1">
-          {sidebarItems.map((item, index) => (
-            <div
-              key={index}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-poppins ${
-                item.active 
-                  ? 'bg-[#002169] text-white' 
-                  : 'text-[#F3F3F3] hover:bg-[#767676] hover:text-white'
-              }`}
-            >
-              <item.icon className="w-5 h-5 flex-shrink-0" />
-              {sidebarOpen && (
-                <span className="text-sm font-medium">{item.name}</span>
-              )}
-            </div>
-          ))}
-        </nav>
-
-        {/* User section */}
-        {sidebarOpen && (
-          <div className="p-4 border-t border-[#767676]">
-            <div className="text-xs text-[#F3F3F3] font-poppins">leo.t@guardify.com</div>
-          </div>
-        )}
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="bg-white border-b border-[#F3F3F3] px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold text-[#191C35] font-poppins">Impact Report</h1>
-              <p className="text-[#767676] mt-1 font-poppins">Forwarding the Mission of Child Protection • Q4 2024</p>
-            </div>
-            <div className="flex gap-3">
-              <Button variant="outline" className="flex items-center gap-2 font-poppins border-[#191C35] text-[#191C35] hover:bg-[#191C35] hover:text-white">
-                <Share2 className="w-4 h-4" />
-                Share Report
-              </Button>
-              <Button className="flex items-center gap-2 bg-[#191C35] hover:bg-[#002169] font-poppins">
-                <Download className="w-4 h-4" />
-                Download PDF
-              </Button>
-            </div>
-          </div>
+      {/* Mission Statement */}
+      <div className="px-6 py-8 bg-gradient-to-r from-[#DBEAFE] to-[#F4F1FA]">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-[#191C35] mb-3 font-poppins">
+            Accelerate your investigations with Evidence Intelligence Tools
+          </h2>
+          <p className="text-[#767676] max-w-2xl mx-auto font-poppins">
+            Help you uncover facts, protect sensitive information, and extract critical insights from evidence files through secure technology and collaborative tools.
+          </p>
         </div>
+      </div>
 
-        {/* Mission Statement */}
-        <div className="px-6 py-8 bg-gradient-to-r from-[#DBEAFE] to-[#F4F1FA]">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-[#191C35] mb-3 font-poppins">
-              Accelerate your investigations with Evidence Intelligence Tools
-            </h2>
-            <p className="text-[#767676] max-w-2xl mx-auto font-poppins">
-              Help you uncover facts, protect sensitive information, and extract critical insights from evidence files through secure technology and collaborative tools.
-            </p>
-          </div>
-        </div>
+      {/* Content */}
+      <div className="px-6 py-8 space-y-8 max-w-7xl mx-auto w-full">
+        
+        {/* KPI Cards */}
+        <KPICards data={reportData.kpi_metrics} />
 
-        {/* Content */}
-        <div className="flex-1 px-6 py-8 space-y-8 max-w-7xl mx-auto w-full">
-          
-          {/* KPI Cards */}
-          <KPICards data={reportData.kpi_metrics} />
-
-          {/* Interview Activity and Videos Uploaded - Side by Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Interview Activity */}
-            <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-              <div className="text-left mb-6">
-                <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Interview Activity</h3>
-                <p className="text-[#767676] font-poppins text-sm">
-                  {interviewViewFilter === 'nationwide' 
-                    ? 'CACs nationwide securely logged interviews every month.'
-                    : 'Your team securely logged interviews every month.'
-                  }
-                </p>
-              </div>
-              <InterviewsChart 
-                data={getCurrentInterviewData()} 
-                viewType={interviewViewFilter}
-                onViewTypeChange={setInterviewViewFilter}
-              />
-            </Card>
-
-            {/* Uploaded Video Interviews */}
-            <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-              <div className="text-left mb-6">
-                <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Uploaded Video Interviews</h3>
-                <p className="text-[#767676] font-poppins text-sm">
-                  {uploadViewFilter === 'nationwide' 
-                    ? 'Video evidence uploaded to secure platform monthly.'
-                    : 'Your team\'s video uploads to secure platform monthly.'
-                  }
-                </p>
-              </div>
-              <InterviewsUploadedChart 
-                data={getCurrentUploadData()} 
-                viewType={uploadViewFilter}
-                onViewTypeChange={setUploadViewFilter}
-              />
-            </Card>
-          </div>
-
-          {/* Age Distribution and Agency Engagement - Side by Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Age Distribution */}
-            <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-              <div className="text-left mb-6">
-                <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Age Distribution of People Interviewed</h3>
-                <p className="text-[#767676] font-poppins">
-                  Understanding age patterns helps tailor appropriate support services and interview approaches.
-                </p>
-              </div>
-              <AgeDistributionChart 
-                data={reportData.age_distribution} 
-                viewType={ageViewFilter}
-                onViewTypeChange={setAgeViewFilter}
-              />
-            </Card>
-
-            {/* Agency Engagement */}
-            <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-              <div className="text-left mb-6">
-                <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Agencies Engaged Across MDT</h3>
-                <p className="text-[#767676] font-poppins">
-                  Multi-disciplinary team collaboration ensures comprehensive support for each case.
-                </p>
-              </div>
-              <AgencyEngagementChart data={reportData.agency_engagement} />
-            </Card>
-          </div>
-
-          {/* Agency Coverage Map */}
+        {/* Interview Activity and Videos Uploaded - Side by Side */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Interview Activity */}
           <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
             <div className="text-left mb-6">
-              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Agency Coverage Map</h3>
-              <p className="text-[#767676] font-poppins">
-                Guardify's impact spans across regions, supporting Child Advocacy Centers nationwide.
+              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Interview Activity</h3>
+              <p className="text-[#767676] font-poppins text-sm">
+                {interviewViewFilter === 'nationwide' 
+                  ? 'CACs nationwide securely logged interviews every month.'
+                  : 'Your team securely logged interviews every month.'
+                }
               </p>
             </div>
-            <InteractiveUSMap />
+            <InterviewsChart 
+              data={getCurrentInterviewData()} 
+              viewType={interviewViewFilter}
+              onViewTypeChange={setInterviewViewFilter}
+            />
           </Card>
 
-          {/* Cost Savings */}
+          {/* Uploaded Video Interviews */}
           <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
             <div className="text-left mb-6">
-              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Quantified Savings & Time Saved</h3>
-              <p className="text-[#767676] font-poppins">
-                Digital workflows eliminate traditional costs while saving valuable staff time.
+              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Uploaded Video Interviews</h3>
+              <p className="text-[#767676] font-poppins text-sm">
+                {uploadViewFilter === 'nationwide' 
+                  ? 'Video evidence uploaded to secure platform monthly.'
+                  : 'Your team\'s video uploads to secure platform monthly.'
+                }
               </p>
             </div>
-            <CostSavingsChart 
-              costSavings={reportData.cost_savings} 
-              timeSavedHours={reportData.time_saved_hours} 
+            <InterviewsUploadedChart 
+              data={getCurrentUploadData()} 
+              viewType={uploadViewFilter}
+              onViewTypeChange={setUploadViewFilter}
             />
           </Card>
         </div>
 
-        {/* Footer */}
-        <div className="bg-[#FAFAFA] px-6 py-4 border-t border-[#F3F3F3]">
-          <div className="text-center">
-            <p className="text-[#767676] text-sm font-poppins">
-              Generated by Guardify • Child Advocacy Center Technology Platform
+        {/* Age Distribution and Agency Engagement - Side by Side */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Age Distribution */}
+          <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
+            <div className="text-left mb-6">
+              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Age Distribution of People Interviewed</h3>
+              <p className="text-[#767676] font-poppins">
+                Understanding age patterns helps tailor appropriate support services and interview approaches.
+              </p>
+            </div>
+            <AgeDistributionChart 
+              data={reportData.age_distribution} 
+              viewType={ageViewFilter}
+              onViewTypeChange={setAgeViewFilter}
+            />
+          </Card>
+
+          {/* Agency Engagement */}
+          <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
+            <div className="text-left mb-6">
+              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Agencies Engaged Across MDT</h3>
+              <p className="text-[#767676] font-poppins">
+                Multi-disciplinary team collaboration ensures comprehensive support for each case.
+              </p>
+            </div>
+            <AgencyEngagementChart data={reportData.agency_engagement} />
+          </Card>
+        </div>
+
+        {/* Agency Coverage Map */}
+        <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
+          <div className="text-left mb-6">
+            <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Agency Coverage Map</h3>
+            <p className="text-[#767676] font-poppins">
+              Guardify's impact spans across regions, supporting Child Advocacy Centers nationwide.
             </p>
           </div>
+          <InteractiveUSMap />
+        </Card>
+
+        {/* Cost Savings */}
+        <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
+          <div className="text-left mb-6">
+            <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Quantified Savings & Time Saved</h3>
+            <p className="text-[#767676] font-poppins">
+              Digital workflows eliminate traditional costs while saving valuable staff time.
+            </p>
+          </div>
+          <CostSavingsChart 
+            costSavings={reportData.cost_savings} 
+            timeSavedHours={reportData.time_saved_hours} 
+          />
+        </Card>
+      </div>
+
+      {/* Footer */}
+      <div className="bg-[#FAFAFA] px-6 py-4 border-t border-[#F3F3F3]">
+        <div className="text-center">
+          <p className="text-[#767676] text-sm font-poppins">
+            Generated by Guardify • Child Advocacy Center Technology Platform
+          </p>
         </div>
       </div>
     </div>

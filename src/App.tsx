@@ -1,27 +1,42 @@
+import React, { useState } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import GuardifyLayout from './components/Layout/GuardifyLayout';
+import InterviewsPage from './components/pages/InterviewsPage';
+import HealthRecordsPage from './components/pages/HealthRecordsPage';
+import ImpactReport from './components/ImpactReport';
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const [activeTab, setActiveTab] = useState('interviews');
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'interviews':
+        return <InterviewsPage />;
+      case 'health-records':
+        return <HealthRecordsPage />;
+      case 'impact-report':
+        return <ImpactReport />;
+      default:
+        return <InterviewsPage />;
+    }
+  };
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <GuardifyLayout activeTab={activeTab} onTabChange={setActiveTab}>
+          {renderContent()}
+        </GuardifyLayout>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
