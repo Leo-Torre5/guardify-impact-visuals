@@ -34,7 +34,7 @@ const GuardifyLayout: React.FC<GuardifyLayoutProps> = ({ children, activeTab, on
   const sidebarItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'interviews', label: 'Interviews', icon: Video },
-    { id: 'health-records', label: 'Health Records', icon: FileText },
+    { id: 'health-records', label: 'Health Records', icon: FileText, disabled: true },
     { id: 'guardify-live', label: 'Guardify Live', icon: Play },
     { id: 'messages', label: 'Messages', icon: MessageSquare },
     { id: 'center-files', label: 'Center Files', icon: Folder },
@@ -54,35 +54,41 @@ const GuardifyLayout: React.FC<GuardifyLayoutProps> = ({ children, activeTab, on
     { id: 'impact-report', label: 'IMPACT REPORT' },
   ];
 
+  const handleSidebarClick = (itemId: string) => {
+    if (itemId === 'summary-report') {
+      onTabChange('interviews'); // Default to interviews when clicking Summary Report
+    } else {
+      onTabChange(itemId);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 flex font-poppins">
       {/* Sidebar */}
-      <div className={`${sidebarCollapsed ? 'w-16' : 'w-64'} transition-all duration-300 bg-[#6B46C1] flex flex-col`}>
+      <div className={`${sidebarCollapsed ? 'w-16' : 'w-64'} transition-all duration-300 bg-[#191C35] flex flex-col`}>
         {/* Header */}
-        <div className="h-16 flex items-center px-4 border-b border-purple-500">
+        <div className="h-16 flex items-center px-4 border-b border-gray-600">
           <button 
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="text-white hover:bg-purple-500 p-1 rounded"
+            className="text-white hover:bg-gray-600 p-1 rounded"
           >
             <Menu className="w-5 h-5" />
           </button>
           {!sidebarCollapsed && (
             <div className="ml-3 flex items-center">
-              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2">
-                <div className="w-6 h-6 bg-[#6B46C1] rounded-full"></div>
-              </div>
-              <div className="text-white">
-                <div className="font-semibold text-sm">Guardify</div>
-                <div className="text-xs opacity-75">Child Advocacy Center</div>
-              </div>
+              <img 
+                src="/Guardify_Logo_Landscape_light.png" 
+                alt="Guardify" 
+                className="h-8 w-auto"
+              />
             </div>
           )}
         </div>
 
         {/* User Info */}
         {!sidebarCollapsed && (
-          <div className="px-4 py-3 border-b border-purple-500">
-            <div className="text-white text-sm">
+          <div className="px-4 py-3 border-b border-gray-600">
+            <div className="text-white text-sm font-poppins">
               <div className="font-medium">Guardify for CACs | intern</div>
               <div className="text-xs opacity-75">sandbox</div>
               <div className="text-xs opacity-75">Leo Torres</div>
@@ -95,11 +101,15 @@ const GuardifyLayout: React.FC<GuardifyLayoutProps> = ({ children, activeTab, on
           {sidebarItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => onTabChange(item.id)}
-              className={`w-full flex items-center px-3 py-2 text-sm rounded-md transition-colors ${
-                activeTab === item.id
-                  ? 'bg-purple-500 text-white'
-                  : 'text-purple-100 hover:bg-purple-500 hover:text-white'
+              onClick={() => !item.disabled && handleSidebarClick(item.id)}
+              disabled={item.disabled}
+              className={`w-full flex items-center px-3 py-2 text-sm rounded-md transition-colors font-poppins ${
+                (activeTab === item.id || 
+                 (item.id === 'summary-report' && ['interviews', 'health-records', 'impact-report'].includes(activeTab)))
+                  ? 'bg-[#006FA7] text-white'
+                  : item.disabled
+                  ? 'text-gray-500 cursor-not-allowed'
+                  : 'text-gray-300 hover:bg-[#006FA7] hover:text-white'
               }`}
             >
               <item.icon className="w-5 h-5 flex-shrink-0" />
@@ -109,7 +119,7 @@ const GuardifyLayout: React.FC<GuardifyLayoutProps> = ({ children, activeTab, on
 
           {!sidebarCollapsed && (
             <div className="pt-6">
-              <div className="px-3 text-xs font-semibold text-purple-200 uppercase tracking-wider">
+              <div className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider font-poppins">
                 Guardify Community
               </div>
               <div className="mt-2 space-y-1">
@@ -117,10 +127,10 @@ const GuardifyLayout: React.FC<GuardifyLayoutProps> = ({ children, activeTab, on
                   <button
                     key={item.id}
                     onClick={() => onTabChange(item.id)}
-                    className={`w-full flex items-center px-3 py-2 text-sm rounded-md transition-colors ${
+                    className={`w-full flex items-center px-3 py-2 text-sm rounded-md transition-colors font-poppins ${
                       activeTab === item.id
-                        ? 'bg-purple-500 text-white'
-                        : 'text-purple-100 hover:bg-purple-500 hover:text-white'
+                        ? 'bg-[#006FA7] text-white'
+                        : 'text-gray-300 hover:bg-[#006FA7] hover:text-white'
                     }`}
                   >
                     <item.icon className="w-5 h-5 flex-shrink-0" />
@@ -138,7 +148,7 @@ const GuardifyLayout: React.FC<GuardifyLayoutProps> = ({ children, activeTab, on
         {/* Top Bar */}
         <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
           <div className="flex items-center space-x-4">
-            <h1 className="text-xl font-semibold text-gray-900">
+            <h1 className="text-xl font-semibold text-gray-900 font-poppins">
               {activeTab === 'impact-report' ? 'Impact Report' : 'Guardify for CACs'}
             </h1>
           </div>
@@ -168,8 +178,8 @@ const GuardifyLayout: React.FC<GuardifyLayoutProps> = ({ children, activeTab, on
           </div>
         </div>
 
-        {/* Tab Navigation - Only show for certain pages */}
-        {(activeTab === 'interviews' || activeTab === 'health-records' || activeTab === 'impact-report') && (
+        {/* Tab Navigation - Only show for Summary Report pages */}
+        {['interviews', 'health-records', 'impact-report'].includes(activeTab) && (
           <div className="bg-white border-b border-gray-200">
             <div className="px-6">
               <nav className="flex space-x-8">
@@ -177,9 +187,9 @@ const GuardifyLayout: React.FC<GuardifyLayoutProps> = ({ children, activeTab, on
                   <button
                     key={tab.id}
                     onClick={() => onTabChange(tab.id)}
-                    className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                    className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors font-poppins ${
                       activeTab === tab.id
-                        ? 'border-[#6B46C1] text-[#6B46C1]'
+                        ? 'border-[#006FA7] text-[#006FA7]'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                     }`}
                   >

@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -68,19 +67,14 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				guardify: {
+					navy: '#191C35',
+					blue: '#006FA7',
+					'baby-blue': '#44c5e2',
 					purple: '#9B59B6',
-					'purple-light': '#F4F1FA',
-					'purple-dark': '#8E44AD',
-					blue: '#2563EB',
-					'blue-light': '#DBEAFE',
-					'blue-dark': '#1D4ED8',
-					'navy-blue': '#1E3A8A',
-					teal: '#0891B2',
-					'teal-light': '#CFFAFE',
-					grey: '#EAEAEA',
-					'grey-light': '#F8F9FA',
-					'grey-dark': '#3E3E3E',
-					background: '#F8FAFC'
+					'true-blue': '#002169',
+					'light-grey': '#F3F3F3',
+					'dark-grey': '#767676',
+					background: '#FAFAFA'
 				}
 			},
 			borderRadius: {

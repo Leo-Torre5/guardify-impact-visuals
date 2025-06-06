@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
@@ -44,6 +43,12 @@
     --sidebar-accent-foreground: 226 232 240;
     --sidebar-border: 51 65 85;
     --sidebar-ring: 37 99 235;
+
+    /* Guardify Brand Colors */
+    --guardify-navy: 25 28 53; /* #191C35 */
+    --guardify-blue: 0 111 167; /* #006FA7 */
+    --guardify-baby-blue: 68 197 226; /* #44c5e2 */
+    --guardify-purple: 155 89 182; /* #9B59B6 */
   }
 }
 
