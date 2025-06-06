@@ -1,7 +1,11 @@
 
 import React from 'react';
-import { User } from 'lucide-react';
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+// Register Chart.js components
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface AgeDistributionChartProps {
   data: {
@@ -33,14 +37,9 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
 
   const currentData = getRegionalData(viewType);
   
-  // Convert data to array and sort by percentage (highest to lowest)
-  const sortedData = Object.entries(currentData)
-    .map(([ageRange, percentage]) => ({
-      ageRange,
-      percentage,
-      label: `${ageRange} years`
-    }))
-    .sort((a, b) => b.percentage - a.percentage);
+  // Convert data to arrays sorted by percentage
+  const sortedEntries = Object.entries(currentData)
+    .sort(([, a], [, b]) => (b as number) - (a as number));
 
   const regionOptions = [
     { value: "nationwide", label: "Nationwide" },
@@ -53,16 +52,44 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
     { value: "northwest", label: "Northwest" }
   ];
 
-  // Brand colors for the progress bars (purple gradient)
-  const getBarColor = (index: number) => {
-    const colors = [
-      '#9B59B6', // Purple
-      '#8b5cf6', // Lighter purple
-      '#a855f7', // Medium purple
-      '#9333ea', // Darker purple
-      '#7c3aed'  // Deep purple
-    ];
-    return colors[index % colors.length];
+  // Guardify purple gradient colors
+  const colors = [
+    '#9B59B6', // Primary purple
+    '#8b5cf6', // Lighter purple
+    '#a855f7', // Medium purple
+    '#9333ea', // Darker purple
+    '#7c3aed'  // Deep purple
+  ];
+
+  // Chart.js configuration
+  const chartData = {
+    labels: sortedEntries.map(([ageRange]) => `${ageRange} years`),
+    datasets: [
+      {
+        data: sortedEntries.map(([, percentage]) => percentage as number),
+        backgroundColor: colors,
+        borderColor: colors,
+        borderWidth: 2,
+        cutout: '60%', // Creates donut effect
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false, // We'll create custom legend
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context: any) {
+            return `${context.label}: ${context.parsed}%`;
+          }
+        }
+      }
+    },
   };
 
   return (
@@ -87,52 +114,46 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
         </Select>
       </div>
 
-      {/* Progress Bars */}
-      <div className="space-y-4">
-        {sortedData.map((item, index) => (
-          <div key={item.ageRange} className="flex items-center gap-4">
-            {/* Human Silhouette */}
-            <div className="flex-shrink-0">
-              <User 
-                className="w-8 h-8" 
-                style={{ color: getBarColor(index) }}
-                fill="currentColor"
-              />
-            </div>
-            
-            {/* Progress Bar Container */}
-            <div className="flex-1">
-              {/* Percentage Label */}
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-sm font-poppins text-[#191C35] font-medium">
-                  {item.label}
-                </span>
-                <span className="text-sm font-poppins text-[#191C35] font-semibold">
-                  {item.percentage}%
-                </span>
+      {/* Chart and Legend Container */}
+      <div className="flex items-center gap-8">
+        {/* Donut Chart */}
+        <div className="relative w-48 h-48 flex-shrink-0">
+          <Doughnut data={chartData} options={chartOptions} />
+          {/* Center Text */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-[#191C35] font-poppins">
+                {Object.values(currentData).reduce((sum: number, val: number) => sum + val, 0)}%
               </div>
-              
-              {/* Progress Bar */}
-              <div className="relative w-full h-8 bg-[#F3F3F3] rounded-lg overflow-hidden">
-                <div 
-                  className="h-full rounded-lg transition-all duration-1000 ease-out flex items-center justify-center"
-                  style={{ 
-                    width: `${item.percentage}%`, 
-                    backgroundColor: getBarColor(index),
-                    background: `linear-gradient(90deg, ${getBarColor(index)}, ${getBarColor(index)}dd)`
-                  }}
-                >
-                  <span className="text-white text-xs font-poppins font-medium">
-                    {item.ageRange}
-                  </span>
-                </div>
-              </div>
+              <div className="text-xs text-[#767676] font-poppins">Total</div>
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* Custom Legend */}
+        <div className="flex-1 space-y-3">
+          {sortedEntries.map(([ageRange, percentage], index) => (
+            <div key={ageRange} className="flex items-center gap-3">
+              {/* Color indicator */}
+              <div 
+                className="w-4 h-4 rounded-sm flex-shrink-0"
+                style={{ backgroundColor: colors[index] }}
+              />
+              {/* Age range and percentage */}
+              <div className="flex-1 flex justify-between items-center">
+                <span className="text-sm font-poppins text-[#191C35] font-medium">
+                  {ageRange} years
+                </span>
+                <span className="text-sm font-poppins text-[#191C35] font-semibold">
+                  {percentage}%
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       
-      <div className="text-center mt-6">
+      <div className="text-center mt-4">
         <div className="text-sm text-[#767676] font-poppins">
           Age distribution for {regionOptions.find(r => r.value === viewType)?.label}
         </div>
