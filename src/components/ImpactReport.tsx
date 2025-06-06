@@ -253,7 +253,7 @@ const ImpactReport = () => {
             {/* Age Distribution */}
             <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
               <div className="text-left mb-6">
-                <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Age Distribution of Interviewed Survivors</h3>
+                <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Age Distribution of People Interviewed</h3>
                 <p className="text-[#767676] font-poppins">
                   Understanding age patterns helps tailor appropriate support services and interview approaches.
                 </p>

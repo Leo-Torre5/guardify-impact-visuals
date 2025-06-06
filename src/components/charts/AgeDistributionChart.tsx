@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { User } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface AgeDistributionChartProps {
@@ -32,11 +32,15 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
   };
 
   const currentData = getRegionalData(viewType);
-  const chartData = Object.entries(currentData).map(([age, percentage]) => ({
-    name: `${age} years`,
-    value: percentage,
-    age
-  }));
+  
+  // Convert data to array and sort by percentage (highest to lowest)
+  const sortedData = Object.entries(currentData)
+    .map(([ageRange, percentage]) => ({
+      ageRange,
+      percentage,
+      label: `${ageRange} years`
+    }))
+    .sort((a, b) => b.percentage - a.percentage);
 
   const regionOptions = [
     { value: "nationwide", label: "Nationwide" },
@@ -49,47 +53,16 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
     { value: "northwest", label: "Northwest" }
   ];
 
-  // Brand colors matching your guidelines
-  const COLORS = [
-    '#191C35', // Navy Blue
-    '#002169', // True Blue  
-    '#006FA7', // Blue
-    '#44c5e2', // Baby Blue
-    '#9B59B6'  // Purple
-  ];
-
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-3 rounded-lg shadow-lg border border-[#F3F3F3]">
-          <p className="font-poppins font-semibold text-[#191C35]">
-            {payload[0].payload.name}
-          </p>
-          <p className="font-poppins text-[#767676]">
-            {payload[0].value}% of survivors
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  const CustomLegend = ({ payload }: any) => {
-    return (
-      <div className="flex flex-wrap gap-4 justify-center mt-6">
-        {payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center gap-2">
-            <div 
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: entry.color }}
-            />
-            <span className="text-sm font-poppins text-[#767676]">
-              {entry.value}: {chartData[index].value}%
-            </span>
-          </div>
-        ))}
-      </div>
-    );
+  // Brand colors for the progress bars (purple gradient)
+  const getBarColor = (index: number) => {
+    const colors = [
+      '#9B59B6', // Purple
+      '#8b5cf6', // Lighter purple
+      '#a855f7', // Medium purple
+      '#9333ea', // Darker purple
+      '#7c3aed'  // Deep purple
+    ];
+    return colors[index % colors.length];
   };
 
   return (
@@ -97,7 +70,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
       {/* Filter */}
       <div className="flex justify-end">
         <Select value={viewType} onValueChange={onViewTypeChange}>
-          <SelectTrigger className="w-48 font-poppins border-[#191C35] focus:ring-[#191C35] text-[#191C35] text-sm">
+          <SelectTrigger className="w-36 h-8 font-poppins border-[#191C35] focus:ring-[#191C35] text-[#191C35] text-xs px-2">
             <SelectValue placeholder="Select region" />
           </SelectTrigger>
           <SelectContent className="bg-white border-[#191C35] z-[9999]">
@@ -105,7 +78,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
               <SelectItem 
                 key={option.value} 
                 value={option.value}
-                className="focus:bg-[#DBEAFE] focus:text-[#191C35] text-[#191C35]"
+                className="focus:bg-[#DBEAFE] focus:text-[#191C35] text-[#191C35] text-xs"
               >
                 {option.label}
               </SelectItem>
@@ -114,27 +87,51 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
         </Select>
       </div>
 
-      <div className="h-80">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={120}
-              paddingAngle={2}
-              dataKey="value"
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} />
-            <Legend content={<CustomLegend />} />
-          </PieChart>
-        </ResponsiveContainer>
+      {/* Progress Bars */}
+      <div className="space-y-4">
+        {sortedData.map((item, index) => (
+          <div key={item.ageRange} className="flex items-center gap-4">
+            {/* Human Silhouette */}
+            <div className="flex-shrink-0">
+              <User 
+                className="w-8 h-8" 
+                style={{ color: getBarColor(index) }}
+                fill="currentColor"
+              />
+            </div>
+            
+            {/* Progress Bar Container */}
+            <div className="flex-1">
+              {/* Percentage Label */}
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-sm font-poppins text-[#191C35] font-medium">
+                  {item.label}
+                </span>
+                <span className="text-sm font-poppins text-[#191C35] font-semibold">
+                  {item.percentage}%
+                </span>
+              </div>
+              
+              {/* Progress Bar */}
+              <div className="relative w-full h-8 bg-[#F3F3F3] rounded-lg overflow-hidden">
+                <div 
+                  className="h-full rounded-lg transition-all duration-1000 ease-out flex items-center justify-center"
+                  style={{ 
+                    width: `${item.percentage}%`, 
+                    backgroundColor: getBarColor(index),
+                    background: `linear-gradient(90deg, ${getBarColor(index)}, ${getBarColor(index)}dd)`
+                  }}
+                >
+                  <span className="text-white text-xs font-poppins font-medium">
+                    {item.ageRange}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
+      
       <div className="text-center mt-6">
         <div className="text-sm text-[#767676] font-poppins">
           Age distribution for {regionOptions.find(r => r.value === viewType)?.label}
