@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -11,7 +12,7 @@ import ImpactReport from './components/ImpactReport';
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [activeTab, setActiveTab] = useState('interviews');
+  const [activeTab, setActiveTab] = useState('summary-report');
 
   const renderContent = () => {
     switch (activeTab) {
@@ -19,10 +20,11 @@ const App = () => {
         return <InterviewsPage />;
       case 'health-records':
         return <HealthRecordsPage />;
+      case 'summary-report':
       case 'impact-report':
         return <ImpactReport />;
       default:
-        return <InterviewsPage />;
+        return <ImpactReport />;
     }
   };
 
