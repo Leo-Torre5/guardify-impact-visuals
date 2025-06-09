@@ -65,15 +65,15 @@ const InterviewsChart: React.FC<InterviewsChartProps> = ({ data, viewType, onVie
       {/* Filter */}
       <div className="flex justify-end">
         <Select value={viewType} onValueChange={onViewTypeChange}>
-          <SelectTrigger className="w-48 font-poppins border-[#191C35] focus:ring-[#191C35] text-[#191C35] text-sm">
+          <SelectTrigger className="w-48 font-poppins bg-white border-[#1E3A8A] text-[#1E3A8A] hover:bg-gray-50 text-sm">
             <SelectValue placeholder="Select region" />
           </SelectTrigger>
-          <SelectContent className="bg-white border-[#191C35] z-[9999]">
+          <SelectContent className="bg-white border-[#1E3A8A] z-[9999]">
             {regionOptions.map((option) => (
               <SelectItem 
                 key={option.value} 
                 value={option.value}
-                className="focus:bg-[#DBEAFE] focus:text-[#191C35] text-[#191C35]"
+                className="focus:bg-[#DBEAFE] focus:text-[#1E3A8A] text-[#1E3A8A]"
               >
                 {option.label}
               </SelectItem>
