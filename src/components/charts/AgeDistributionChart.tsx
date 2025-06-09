@@ -1,45 +1,49 @@
 
 import React from 'react';
-import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
-// Register Chart.js components
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface AgeDistributionChartProps {
   data: {
-    "0-4": number;
-    "5-9": number;
-    "10-15": number;
-    "16-21": number;
-    "22+": number;
+    [key: string]: number;
   };
   viewType: string;
   onViewTypeChange: (value: string) => void;
 }
 
 const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewType, onViewTypeChange }) => {
-  // Generate regional variations
-  const getRegionalData = (region: string) => {
-    const variations: { [key: string]: any } = {
-      'nationwide': data,
-      'my-cac': { "0-4": 8, "5-9": 24, "10-15": 52, "16-21": 14, "22+": 2 },
-      'northeast': { "0-4": 6, "5-9": 20, "10-15": 58, "16-21": 14, "22+": 2 },
-      'southeast': { "0-4": 7, "5-9": 25, "10-15": 54, "16-21": 12, "22+": 2 },
-      'midwest': { "0-4": 4, "5-9": 19, "10-15": 60, "16-21": 15, "22+": 2 },
-      'southwest': { "0-4": 6, "5-9": 23, "10-15": 55, "16-21": 14, "22+": 2 },
-      'west': { "0-4": 5, "5-9": 21, "10-15": 57, "16-21": 16, "22+": 1 },
-      'northwest': { "0-4": 4, "5-9": 18, "10-15": 61, "16-21": 16, "22+": 1 }
+  // Calculate regional multipliers
+  const getRegionalMultiplier = (region: string) => {
+    const multipliers: { [key: string]: number } = {
+      'nationwide': 1.0,
+      'my-cac': 0.0015,
+      'northeast': 0.22,
+      'southeast': 0.28,
+      'midwest': 0.18,
+      'southwest': 0.15,
+      'west': 0.12,
+      'northwest': 0.05
     };
-    return variations[region] || data;
+    return multipliers[region] || 1.0;
   };
 
-  const currentData = getRegionalData(viewType);
+  const multiplier = getRegionalMultiplier(viewType);
   
-  // Convert data to arrays sorted by percentage
-  const sortedEntries = Object.entries(currentData)
-    .sort(([, a], [, b]) => (b as number) - (a as number));
+  // Apply multiplier to data
+  const adjustedData = Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [key, Math.round(value * multiplier)])
+  );
+
+  const total = Object.values(adjustedData).reduce((sum, value) => sum + value, 0);
+  const maxValue = Math.max(...Object.values(adjustedData));
+
+  // Color scheme for age ranges
+  const colors = [
+    '#9B59B6', // purple
+    '#006FA7', // blue
+    '#0891B2', // teal
+    '#44c5e2', // light blue
+    '#191C35'  // navy blue
+  ];
 
   const regionOptions = [
     { value: "nationwide", label: "Nationwide" },
@@ -52,48 +56,8 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
     { value: "northwest", label: "Northwest" }
   ];
 
-  // Guardify purple gradient colors
-  const colors = [
-    '#9B59B6', // Primary purple
-    '#8b5cf6', // Lighter purple
-    '#a855f7', // Medium purple
-    '#9333ea', // Darker purple
-    '#7c3aed'  // Deep purple
-  ];
-
-  // Chart.js configuration
-  const chartData = {
-    labels: sortedEntries.map(([ageRange]) => `${ageRange} years`),
-    datasets: [
-      {
-        data: sortedEntries.map(([, percentage]) => percentage as number),
-        backgroundColor: colors,
-        borderColor: colors,
-        borderWidth: 2,
-        cutout: '60%', // Creates donut effect
-      },
-    ],
-  };
-
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false, // We'll create custom legend
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context: any) {
-            return `${context.label}: ${context.parsed}%`;
-          }
-        }
-      }
-    },
-  };
-
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Filter */}
       <div className="flex justify-end">
         <Select value={viewType} onValueChange={onViewTypeChange}>
@@ -114,48 +78,47 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
         </Select>
       </div>
 
-      {/* Chart and Legend Container */}
-      <div className="flex items-center gap-8">
-        {/* Donut Chart */}
-        <div className="relative w-48 h-48 flex-shrink-0">
-          <Doughnut data={chartData} options={chartOptions} />
-          {/* Center Text */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-[#191C35] font-poppins">
-                {Object.values(currentData).reduce((sum: number, val: number) => sum + val, 0)}%
-              </div>
-              <div className="text-xs text-[#767676] font-poppins">Total</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Custom Legend */}
-        <div className="flex-1 space-y-3">
-          {sortedEntries.map(([ageRange, percentage], index) => (
-            <div key={ageRange} className="flex items-center gap-3">
-              {/* Color indicator */}
-              <div 
-                className="w-4 h-4 rounded-sm flex-shrink-0"
-                style={{ backgroundColor: colors[index] }}
-              />
-              {/* Age range and percentage */}
-              <div className="flex-1 flex justify-between items-center">
-                <span className="text-sm font-poppins text-[#191C35] font-medium">
+      {/* Chart */}
+      <div className="space-y-4">
+        {Object.entries(adjustedData).map(([ageRange, value], index) => {
+          const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+          const width = maxValue > 0 ? (value / maxValue) * 100 : 0;
+          const color = colors[index % colors.length];
+          
+          return (
+            <div key={ageRange} className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-[#767676] font-poppins">
                   {ageRange} years
                 </span>
                 <span className="text-sm font-poppins text-[#191C35] font-semibold">
-                  {percentage as number}%
+                  {percentage}%
                 </span>
               </div>
+              <div className="w-full bg-[#F3F3F3] rounded-full h-4 relative">
+                <div
+                  className="h-4 rounded-full transition-all duration-1000 ease-out flex items-center justify-end pr-2"
+                  style={{ 
+                    width: `${width}%`, 
+                    backgroundColor: color,
+                    minWidth: width > 0 ? '40px' : '0px'
+                  }}
+                >
+                  {width > 15 && (
+                    <span className="text-white text-xs font-medium font-poppins">
+                      {percentage}%
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
-      
-      <div className="text-center mt-4">
-        <div className="text-sm text-[#767676] font-poppins">
-          Age distribution for {regionOptions.find(r => r.value === viewType)?.label}
+          );
+        })}
+        
+        <div className="text-left mt-6">
+          <div className="text-sm text-[#767676] font-poppins">
+            Age distribution for {regionOptions.find(r => r.value === viewType)?.label} interviews
+          </div>
         </div>
       </div>
     </div>

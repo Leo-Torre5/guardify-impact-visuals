@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -180,15 +181,15 @@ const InteractiveUSMap: React.FC = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-50">
         <div className="flex gap-4">
           <Select value={selectedState} onValueChange={setSelectedState}>
-            <SelectTrigger className="w-64 font-poppins border-[#191C35] focus:ring-[#191C35] text-[#191C35]">
+            <SelectTrigger className="w-64 font-poppins bg-white border-[#1E3A8A] text-[#1E3A8A] hover:bg-gray-50">
               <SelectValue placeholder="Select state" />
             </SelectTrigger>
-            <SelectContent className="bg-white border-[#191C35] max-h-60 z-[9999]">
+            <SelectContent className="bg-white border-[#1E3A8A] max-h-60 z-[9999]">
               {states.map((state) => (
                 <SelectItem 
                   key={state} 
                   value={state} 
-                  className="focus:bg-[#DBEAFE] focus:text-[#191C35] text-[#191C35]"
+                  className="focus:bg-[#DBEAFE] focus:text-[#1E3A8A] text-[#1E3A8A]"
                 >
                   {state}
                 </SelectItem>
@@ -197,15 +198,15 @@ const InteractiveUSMap: React.FC = () => {
           </Select>
 
           <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-            <SelectTrigger className="w-48 font-poppins border-[#191C35] focus:ring-[#191C35] text-[#191C35]">
+            <SelectTrigger className="w-48 font-poppins bg-white border-[#1E3A8A] text-[#1E3A8A] hover:bg-gray-50">
               <SelectValue placeholder="Select region" />
             </SelectTrigger>
-            <SelectContent className="bg-white border-[#191C35] z-[9999]">
+            <SelectContent className="bg-white border-[#1E3A8A] z-[9999]">
               {regionOptions.map((option) => (
                 <SelectItem 
                   key={option.value} 
                   value={option.value}
-                  className="focus:bg-[#DBEAFE] focus:text-[#191C35] text-[#191C35]"
+                  className="focus:bg-[#DBEAFE] focus:text-[#1E3A8A] text-[#1E3A8A]"
                 >
                   {option.label}
                 </SelectItem>
