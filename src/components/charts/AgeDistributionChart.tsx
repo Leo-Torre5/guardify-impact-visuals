@@ -145,7 +145,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
                   {ageRange} years
                 </span>
                 <span className="text-sm font-poppins text-[#191C35] font-semibold">
-                  {percentage}%
+                  {percentage as number}%
                 </span>
               </div>
             </div>
