@@ -37,9 +37,10 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
 
   const currentData = getRegionalData(viewType);
   
-  // Convert data to arrays sorted by percentage
+  // Convert data to arrays sorted by percentage with proper typing
   const sortedEntries = Object.entries(currentData)
-    .sort(([, a], [, b]) => (b as number) - (a as number));
+    .sort(([, a], [, b]) => (b as number) - (a as number))
+    .map(([ageRange, percentage]) => [ageRange, percentage as number] as [string, number]);
 
   const regionOptions = [
     { value: "nationwide", label: "Nationwide" },
@@ -66,7 +67,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
     labels: sortedEntries.map(([ageRange]) => `${ageRange} years`),
     datasets: [
       {
-        data: sortedEntries.map(([, percentage]) => percentage as number),
+        data: sortedEntries.map(([, percentage]) => percentage),
         backgroundColor: colors,
         borderColor: colors,
         borderWidth: 2,
