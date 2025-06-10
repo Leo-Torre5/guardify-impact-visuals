@@ -71,7 +71,13 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
       height: 400
     },
     title: {
-      text: '',
+      text: `<span style="font-size: 24px; font-weight: bold; color: #191C35; font-family: Poppins">${total.toLocaleString()}</span><br/><span style="font-size: 12px; color: #767676; font-family: Poppins">Total Interviews</span>`,
+      align: 'center',
+      verticalAlign: 'middle',
+      useHTML: true,
+      style: {
+        fontFamily: 'Poppins'
+      }
     },
     tooltip: {
       pointFormat: '<b>{point.name}</b><br/>{point.y} interviews ({point.percentage:.1f}%)',
@@ -129,28 +135,6 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
       enabled: false
     }
   };
-
-  // Add center text using Highcharts renderer
-  React.useEffect(() => {
-    const chart = Highcharts.charts.find(chart => chart && chart.container.parentElement?.closest('.age-distribution-chart'));
-    if (chart) {
-      const centerX = chart.plotLeft + chart.plotWidth / 2;
-      const centerY = chart.plotTop + chart.plotHeight / 2;
-      
-      // Remove existing center text
-      chart.customText?.destroy();
-      
-      // Add total interviews in center
-      chart.customText = chart.renderer.text(
-        `<span style="font-size: 24px; font-weight: bold; color: #191C35; font-family: Poppins">${total.toLocaleString()}</span><br/><span style="font-size: 12px; color: #767676; font-family: Poppins">Total Interviews</span>`,
-        centerX,
-        centerY,
-        true
-      ).css({
-        textAnchor: 'middle'
-      }).add();
-    }
-  });
 
   return (
     <div className="space-y-6">
