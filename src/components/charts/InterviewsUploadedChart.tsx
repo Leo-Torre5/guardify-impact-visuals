@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -23,6 +22,7 @@ const InterviewsUploadedChart: React.FC<InterviewsUploadedChartProps> = ({ data,
   const getRegionalMultiplier = (region: string) => {
     const multipliers: { [key: string]: number } = {
       'nationwide': 1.0,
+      'all-states': 1.1, // Slightly higher for all states including territories
       'my-cac': 0.0012,
       'northeast': 0.22,
       'southeast': 0.28,
@@ -47,6 +47,7 @@ const InterviewsUploadedChart: React.FC<InterviewsUploadedChartProps> = ({ data,
 
   const regionOptions = [
     { value: "nationwide", label: "Nationwide" },
+    { value: "all-states", label: "All States" },
     { value: "my-cac", label: "My CAC" },
     { value: "northeast", label: "Northeast" },
     { value: "southeast", label: "Southeast" },

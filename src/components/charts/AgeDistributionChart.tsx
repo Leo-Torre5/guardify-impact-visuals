@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
@@ -26,6 +25,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
   const getRegionalMultiplier = (region: string) => {
     const multipliers: { [key: string]: number } = {
       'nationwide': 1.0,
+      'all-states': 1.1, // Slightly higher for all states including territories
       'my-cac': 0.0015,
       'northeast': 0.22,
       'southeast': 0.28,
@@ -63,6 +63,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
 
   const regionOptions = [
     { value: "nationwide", label: "Nationwide" },
+    { value: "all-states", label: "All States" },
     { value: "my-cac", label: "My CAC" },
     { value: "northeast", label: "Northeast" },
     { value: "southeast", label: "Southeast" },
@@ -186,8 +187,8 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Filter */}
-      <div className="flex justify-end">
+      {/* Filter - Hidden since it's controlled by parent */}
+      <div style={{ display: 'none' }}>
         <Select value={viewType} onValueChange={onViewTypeChange}>
           <SelectTrigger className="w-36 h-8 font-poppins bg-white border-[#1E3A8A] text-[#1E3A8A] hover:bg-gray-50 text-xs px-2">
             <SelectValue placeholder="Select region" />

@@ -9,7 +9,7 @@ import CostSavingsChart from './charts/CostSavingsChart';
 import InteractiveUSMap from './charts/InteractiveUSMap';
 
 const ImpactReport = () => {
-  const [interviewViewFilter, setInterviewViewFilter] = useState("nationwide");
+  const [combinedViewFilter, setCombinedViewFilter] = useState("nationwide");
   const [uploadViewFilter, setUploadViewFilter] = useState("nationwide");
 
   // Regional age distribution data (mock data for different regions)
@@ -27,6 +27,13 @@ const ImpactReport = () => {
         "5-9": 25,
         "10-15": 52,
         "16-21": 13,
+        "22+": 2
+      },
+      'all-states': {
+        "0-4": 6,
+        "5-9": 23,
+        "10-15": 55,
+        "16-21": 14,
         "22+": 2
       },
       'northeast': {
@@ -99,6 +106,14 @@ const ImpactReport = () => {
         {"month": "2025-04", "count": 3500},
         {"month": "2025-05", "count": 3100},
         {"month": "2025-06", "count": 2700}
+      ],
+      all_states: [
+        {"month": "2025-01", "count": 3100},
+        {"month": "2025-02", "count": 3600},
+        {"month": "2025-03", "count": 3200},
+        {"month": "2025-04", "count": 3900},
+        {"month": "2025-05", "count": 3400},
+        {"month": "2025-06", "count": 3000}
       ]
     },
     videos_uploaded_by_month: {
@@ -117,6 +132,14 @@ const ImpactReport = () => {
         {"month": "2025-04", "count": 18900},
         {"month": "2025-05", "count": 17400},
         {"month": "2025-06", "count": 16100}
+      ],
+      all_states: [
+        {"month": "2025-01", "count": 16200},
+        {"month": "2025-02", "count": 18500},
+        {"month": "2025-03", "count": 16800},
+        {"month": "2025-04", "count": 20700},
+        {"month": "2025-05", "count": 19100},
+        {"month": "2025-06", "count": 17600}
       ]
     },
     avg_video_duration_mins: 42,
@@ -139,15 +162,23 @@ const ImpactReport = () => {
   };
 
   const getCurrentInterviewData = () => {
-    return interviewViewFilter === 'my-cac' 
-      ? reportData.interviews_uploaded_by_month.my_cac 
-      : reportData.interviews_uploaded_by_month.nationwide;
+    if (combinedViewFilter === 'my-cac') {
+      return reportData.interviews_uploaded_by_month.my_cac;
+    } else if (combinedViewFilter === 'all-states') {
+      return reportData.interviews_uploaded_by_month.all_states;
+    } else {
+      return reportData.interviews_uploaded_by_month.nationwide;
+    }
   };
 
   const getCurrentUploadData = () => {
-    return uploadViewFilter === 'my-cac' 
-      ? reportData.videos_uploaded_by_month.my_cac 
-      : reportData.videos_uploaded_by_month.nationwide;
+    if (uploadViewFilter === 'my-cac') {
+      return reportData.videos_uploaded_by_month.my_cac;
+    } else if (uploadViewFilter === 'all-states') {
+      return reportData.videos_uploaded_by_month.all_states;
+    } else {
+      return reportData.videos_uploaded_by_month.nationwide;
+    }
   };
 
   return (
@@ -158,74 +189,78 @@ const ImpactReport = () => {
         {/* KPI Cards */}
         <KPICards data={reportData.kpi_metrics} />
 
-        {/* Interview Activity and Videos Uploaded - Side by Side */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Interview Activity */}
-          <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-            <div className="text-left mb-6">
-              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Interview Activity</h3>
-              <p className="text-[#767676] font-poppins text-sm">
-                {interviewViewFilter === 'nationwide' 
-                  ? 'CACs nationwide securely logged interviews every month.'
-                  : 'Your team securely logged interviews every month.'
-                }
-              </p>
+        {/* Combined Interview Activity and Age Distribution - Full Width */}
+        <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
+          <div className="text-left mb-6">
+            <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Interview Activity & Age Distribution</h3>
+            <p className="text-[#767676] font-poppins text-sm">
+              {combinedViewFilter === 'my-cac' 
+                ? 'Your team\'s interview activity and age distribution of people interviewed.'
+                : combinedViewFilter === 'all-states'
+                ? 'Interview activity and age distribution across all US states and territories.'
+                : 'Interview activity and age distribution across all regions.'
+              }
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Interview Activity - Left Side */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h4 className="text-lg font-medium text-[#191C35] font-poppins">Interview Activity</h4>
+              </div>
+              <InterviewsChart 
+                data={getCurrentInterviewData()} 
+                viewType={combinedViewFilter}
+                onViewTypeChange={setCombinedViewFilter}
+              />
             </div>
-            <InterviewsChart 
-              data={getCurrentInterviewData()} 
-              viewType={interviewViewFilter}
-              onViewTypeChange={setInterviewViewFilter}
-            />
-          </Card>
 
-          {/* Uploaded Video Interviews */}
-          <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-            <div className="text-left mb-6">
-              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Uploaded Video Interviews</h3>
-              <p className="text-[#767676] font-poppins text-sm">
-                {uploadViewFilter === 'nationwide' 
-                  ? 'Video evidence uploaded to secure platform monthly.'
-                  : 'Your team\'s video uploads to secure platform monthly.'
-                }
-              </p>
+            {/* Age Distribution - Right Side */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h4 className="text-lg font-medium text-[#191C35] font-poppins">Age Distribution of People Interviewed</h4>
+              </div>
+              <AgeDistributionChart 
+                data={getAgeDistributionByRegion(combinedViewFilter)} 
+                viewType={combinedViewFilter}
+                onViewTypeChange={setCombinedViewFilter}
+                interviewActivityData={getCurrentInterviewData()}
+              />
             </div>
-            <InterviewsUploadedChart 
-              data={getCurrentUploadData()} 
-              viewType={uploadViewFilter}
-              onViewTypeChange={setUploadViewFilter}
-            />
-          </Card>
-        </div>
+          </div>
+        </Card>
 
-        {/* Age Distribution and Agency Engagement - Side by Side */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Age Distribution */}
-          <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-            <div className="text-left mb-6">
-              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Age Distribution of People Interviewed</h3>
-              <p className="text-[#767676] font-poppins">
-                Understanding age patterns helps tailor appropriate support services and interview approaches.
-              </p>
-            </div>
-            <AgeDistributionChart 
-              data={getAgeDistributionByRegion(interviewViewFilter)} 
-              viewType={interviewViewFilter}
-              onViewTypeChange={setInterviewViewFilter}
-              interviewActivityData={getCurrentInterviewData()}
-            />
-          </Card>
+        {/* Uploaded Video Interviews - Moved Below */}
+        <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
+          <div className="text-left mb-6">
+            <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Uploaded Video Interviews</h3>
+            <p className="text-[#767676] font-poppins text-sm">
+              {uploadViewFilter === 'my-cac' 
+                ? 'Your team\'s video uploads to secure platform monthly.'
+                : uploadViewFilter === 'all-states'
+                ? 'Video evidence uploaded across all US states and territories monthly.'
+                : 'Video evidence uploaded to secure platform monthly.'
+              }
+            </p>
+          </div>
+          <InterviewsUploadedChart 
+            data={getCurrentUploadData()} 
+            viewType={uploadViewFilter}
+            onViewTypeChange={setUploadViewFilter}
+          />
+        </Card>
 
-          {/* Agency Engagement */}
-          <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-            <div className="text-left mb-6">
-              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Agencies Engaged Across MDT</h3>
-              <p className="text-[#767676] font-poppins">
-                Multi-disciplinary team collaboration ensures comprehensive support for each case.
-              </p>
-            </div>
-            <AgencyEngagementChart data={reportData.agency_engagement} />
-          </Card>
-        </div>
+        {/* Agency Engagement - Now Full Width */}
+        <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
+          <div className="text-left mb-6">
+            <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Agencies Engaged Across MDT</h3>
+            <p className="text-[#767676] font-poppins">
+              Multi-disciplinary team collaboration ensures comprehensive support for each case.
+            </p>
+          </div>
+          <AgencyEngagementChart data={reportData.agency_engagement} />
+        </Card>
 
         {/* Agency Coverage Map */}
         <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
