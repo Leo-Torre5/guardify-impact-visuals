@@ -1,5 +1,7 @@
 
 import React from 'react';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface AgeDistributionChartProps {
@@ -34,9 +36,8 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
   );
 
   const total = Object.values(adjustedData).reduce((sum, value) => sum + value, 0);
-  const maxValue = Math.max(...Object.values(adjustedData));
 
-  // Color scheme for age ranges
+  // Color scheme for age ranges (maintaining current colors)
   const colors = [
     '#9B59B6', // purple
     '#006FA7', // blue
@@ -55,6 +56,101 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
     { value: "west", label: "West" },
     { value: "northwest", label: "Northwest" }
   ];
+
+  // Transform data for Highcharts
+  const chartData = Object.entries(adjustedData).map(([ageRange, value], index) => ({
+    name: `${ageRange} years`,
+    y: value,
+    color: colors[index % colors.length]
+  }));
+
+  const chartOptions: Highcharts.Options = {
+    chart: {
+      type: 'pie',
+      backgroundColor: 'transparent',
+      height: 400
+    },
+    title: {
+      text: '',
+    },
+    tooltip: {
+      pointFormat: '<b>{point.name}</b><br/>{point.y} interviews ({point.percentage:.1f}%)',
+      style: {
+        fontFamily: 'Poppins'
+      }
+    },
+    accessibility: {
+      point: {
+        valueSuffix: '%'
+      }
+    },
+    plotOptions: {
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: true,
+          format: '<b>{point.name}</b><br/>{point.percentage:.1f}%',
+          style: {
+            fontFamily: 'Poppins',
+            fontSize: '12px',
+            color: '#191C35'
+          },
+          distance: 20
+        },
+        showInLegend: true,
+        innerSize: '50%',
+        states: {
+          hover: {
+            halo: {
+              size: 10
+            }
+          }
+        }
+      }
+    },
+    legend: {
+      align: 'right',
+      verticalAlign: 'middle',
+      layout: 'vertical',
+      itemStyle: {
+        fontFamily: 'Poppins',
+        fontSize: '12px',
+        color: '#191C35'
+      },
+      symbolRadius: 0
+    },
+    series: [{
+      type: 'pie',
+      name: 'Age Distribution',
+      data: chartData
+    }],
+    credits: {
+      enabled: false
+    }
+  };
+
+  // Add center text using Highcharts renderer
+  React.useEffect(() => {
+    const chart = Highcharts.charts.find(chart => chart && chart.container.parentElement?.closest('.age-distribution-chart'));
+    if (chart) {
+      const centerX = chart.plotLeft + chart.plotWidth / 2;
+      const centerY = chart.plotTop + chart.plotHeight / 2;
+      
+      // Remove existing center text
+      chart.customText?.destroy();
+      
+      // Add total interviews in center
+      chart.customText = chart.renderer.text(
+        `<span style="font-size: 24px; font-weight: bold; color: #191C35; font-family: Poppins">${total.toLocaleString()}</span><br/><span style="font-size: 12px; color: #767676; font-family: Poppins">Total Interviews</span>`,
+        centerX,
+        centerY,
+        true
+      ).css({
+        textAnchor: 'middle'
+      }).add();
+    }
+  });
 
   return (
     <div className="space-y-6">
@@ -79,41 +175,11 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
       </div>
 
       {/* Chart */}
-      <div className="space-y-4">
-        {Object.entries(adjustedData).map(([ageRange, value], index) => {
-          const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
-          const width = maxValue > 0 ? (value / maxValue) * 100 : 0;
-          const color = colors[index % colors.length];
-          
-          return (
-            <div key={ageRange} className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-[#767676] font-poppins">
-                  {ageRange} years
-                </span>
-                <span className="text-sm font-poppins text-[#191C35] font-semibold">
-                  {percentage}%
-                </span>
-              </div>
-              <div className="w-full bg-[#F3F3F3] rounded-full h-4 relative">
-                <div
-                  className="h-4 rounded-full transition-all duration-1000 ease-out flex items-center justify-end pr-2"
-                  style={{ 
-                    width: `${width}%`, 
-                    backgroundColor: color,
-                    minWidth: width > 0 ? '40px' : '0px'
-                  }}
-                >
-                  {width > 15 && (
-                    <span className="text-white text-xs font-medium font-poppins">
-                      {percentage}%
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
+      <div className="age-distribution-chart">
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={chartOptions}
+        />
         
         <div className="text-left mt-6">
           <div className="text-sm text-[#767676] font-poppins">
