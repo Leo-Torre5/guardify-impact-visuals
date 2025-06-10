@@ -94,7 +94,13 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
           if (!customLabel) {
             customLabel = (chart.options.chart as any).custom.label =
               chart.renderer.label(
-                `Total<br/><strong>${total2025Interviews.toLocaleString()}</strong>`
+                `Total<br/><strong>${total2025Interviews.toLocaleString()}</strong>`,
+                0,
+                0,
+                undefined,
+                undefined,
+                undefined,
+                true
               )
                 .css({
                   color: '#191C35',
