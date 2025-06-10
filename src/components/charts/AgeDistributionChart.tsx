@@ -41,15 +41,18 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
 
   const multiplier = getRegionalMultiplier(viewType);
   
-  // Apply multiplier to data
-  const adjustedData = Object.fromEntries(
-    Object.entries(data).map(([key, value]) => [key, Math.round(value * multiplier)])
-  );
-
   // Get total from Interview Activity (Total 2025 Interviews Logged)
   const interviewMultiplier = getRegionalMultiplier(interviewViewFilter);
   const total2025Interviews = Math.round(
     interviewActivityData.reduce((sum, item) => sum + item.count, 0) * interviewMultiplier
+  );
+
+  // Calculate actual interview counts based on percentages and total
+  const adjustedData = Object.fromEntries(
+    Object.entries(data).map(([key, percentage]) => {
+      const count = Math.round((percentage / 100) * total2025Interviews);
+      return [key, count];
+    })
   );
 
   // Color scheme for age ranges (maintaining current colors)
@@ -84,7 +87,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
       type: 'pie',
       backgroundColor: 'transparent',
       height: 400,
-      custom: {},
+      custom: {} as any,
       events: {
         render() {
           const chart = this;
@@ -126,7 +129,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
       text: ''
     },
     tooltip: {
-      pointFormat: '<b>{point.name}</b><br/>{point.y} interviews ({point.percentage:.1f}%)',
+      pointFormat: '<b>{point.y}</b> interviews ({point.percentage:.1f}%)',
       style: {
         fontFamily: 'Poppins'
       }
@@ -146,7 +149,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
         borderRadius: 8,
         dataLabels: [{
           enabled: true,
-          distance: 20,
+          distance: 20 as any,
           format: '{point.name}',
           style: {
             fontFamily: 'Poppins',
@@ -155,7 +158,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
           }
         }, {
           enabled: true,
-          distance: -15,
+          distance: -15 as any,
           format: '{point.percentage:.0f}%',
           style: {
             fontSize: '0.9em',
@@ -164,13 +167,13 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
           }
         }],
         showInLegend: true,
-        innerSize: '75%'
+        innerSize: '60%'
       }
     },
     series: [{
       type: 'pie',
       name: 'Age Distribution',
-      colorByPoint: true,
+      colorByPoint: true as any,
       data: chartData
     }],
     credits: {
