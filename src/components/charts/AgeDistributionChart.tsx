@@ -14,15 +14,13 @@ interface AgeDistributionChartProps {
     month: string;
     count: number;
   }>;
-  interviewViewFilter: string;
 }
 
 const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ 
   data, 
   viewType, 
   onViewTypeChange, 
-  interviewActivityData,
-  interviewViewFilter 
+  interviewActivityData
 }) => {
   // Calculate regional multipliers
   const getRegionalMultiplier = (region: string) => {
@@ -42,9 +40,8 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
   const multiplier = getRegionalMultiplier(viewType);
   
   // Get total from Interview Activity (Total 2025 Interviews Logged)
-  const interviewMultiplier = getRegionalMultiplier(interviewViewFilter);
   const total2025Interviews = Math.round(
-    interviewActivityData.reduce((sum, item) => sum + item.count, 0) * interviewMultiplier
+    interviewActivityData.reduce((sum, item) => sum + item.count, 0) * multiplier
   );
 
   // Calculate actual interview counts based on percentages and total
@@ -87,14 +84,16 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
       type: 'pie',
       backgroundColor: 'transparent',
       height: 400,
-      custom: {} as any,
       events: {
         render() {
           const chart = this;
           const series = chart.series[0];
-          let customLabel = (chart.options.chart as any).custom.label;
+          let customLabel = (chart.options.chart as any).custom?.label;
 
           if (!customLabel) {
+            if (!(chart.options.chart as any).custom) {
+              (chart.options.chart as any).custom = {};
+            }
             customLabel = (chart.options.chart as any).custom.label =
               chart.renderer.label(
                 `Total<br/><strong>${total2025Interviews.toLocaleString()}</strong>`,
@@ -111,6 +110,10 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
                   fontFamily: 'Poppins'
                 })
                 .add();
+          } else {
+            customLabel.attr({
+              text: `Total<br/><strong>${total2025Interviews.toLocaleString()}</strong>`
+            });
           }
 
           const x = series.center[0] + chart.plotLeft;
@@ -124,7 +127,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
           });
         }
       }
-    },
+    } as any,
     title: {
       text: ''
     },
@@ -149,7 +152,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
         borderRadius: 8,
         dataLabels: [{
           enabled: true,
-          distance: 20 as any,
+          distance: 20,
           format: '{point.name}',
           style: {
             fontFamily: 'Poppins',
@@ -158,14 +161,14 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
           }
         }, {
           enabled: true,
-          distance: -15 as any,
+          distance: -15,
           format: '{point.percentage:.0f}%',
           style: {
             fontSize: '0.9em',
             fontFamily: 'Poppins',
             color: '#191C35'
           }
-        }],
+        }] as any,
         showInLegend: true,
         innerSize: '60%'
       }
@@ -173,9 +176,9 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
     series: [{
       type: 'pie',
       name: 'Age Distribution',
-      colorByPoint: true as any,
+      colorByPoint: true,
       data: chartData
-    }],
+    }] as any,
     credits: {
       enabled: false
     }

@@ -11,7 +11,70 @@ import InteractiveUSMap from './charts/InteractiveUSMap';
 const ImpactReport = () => {
   const [interviewViewFilter, setInterviewViewFilter] = useState("nationwide");
   const [uploadViewFilter, setUploadViewFilter] = useState("nationwide");
-  const [ageViewFilter, setAgeViewFilter] = useState("nationwide");
+
+  // Regional age distribution data (mock data for different regions)
+  const getAgeDistributionByRegion = (region: string) => {
+    const ageDistributions: { [key: string]: { [key: string]: number } } = {
+      'nationwide': {
+        "0-4": 5,
+        "5-9": 22,
+        "10-15": 56,
+        "16-21": 15,
+        "22+": 2
+      },
+      'my-cac': {
+        "0-4": 8,
+        "5-9": 25,
+        "10-15": 52,
+        "16-21": 13,
+        "22+": 2
+      },
+      'northeast': {
+        "0-4": 4,
+        "5-9": 20,
+        "10-15": 58,
+        "16-21": 16,
+        "22+": 2
+      },
+      'southeast': {
+        "0-4": 6,
+        "5-9": 24,
+        "10-15": 54,
+        "16-21": 14,
+        "22+": 2
+      },
+      'midwest': {
+        "0-4": 5,
+        "5-9": 23,
+        "10-15": 55,
+        "16-21": 15,
+        "22+": 2
+      },
+      'southwest': {
+        "0-4": 7,
+        "5-9": 21,
+        "10-15": 57,
+        "16-21": 13,
+        "22+": 2
+      },
+      'west': {
+        "0-4": 4,
+        "5-9": 19,
+        "10-15": 59,
+        "16-21": 16,
+        "22+": 2
+      },
+      'northwest': {
+        "0-4": 3,
+        "5-9": 18,
+        "10-15": 61,
+        "16-21": 16,
+        "22+": 2
+      }
+    };
+    
+    return ageDistributions[region] || ageDistributions['nationwide'];
+  };
 
   const reportData = {
     kpi_metrics: {
@@ -59,13 +122,6 @@ const ImpactReport = () => {
     avg_video_duration_mins: 42,
     active_interviews: 18200,
     archived_interviews: 5200,
-    age_distribution: {
-      "0-4": 5,
-      "5-9": 22,
-      "10-15": 56,
-      "16-21": 15,
-      "22+": 2
-    },
     agency_engagement: [
       {"role": "Law Enforcement", "percent": 46, "icon": "shield"},
       {"role": "CPS", "percent": 24, "icon": "users"},
@@ -152,11 +208,10 @@ const ImpactReport = () => {
               </p>
             </div>
             <AgeDistributionChart 
-              data={reportData.age_distribution} 
-              viewType={ageViewFilter}
-              onViewTypeChange={setAgeViewFilter}
+              data={getAgeDistributionByRegion(interviewViewFilter)} 
+              viewType={interviewViewFilter}
+              onViewTypeChange={setInterviewViewFilter}
               interviewActivityData={getCurrentInterviewData()}
-              interviewViewFilter={interviewViewFilter}
             />
           </Card>
 
