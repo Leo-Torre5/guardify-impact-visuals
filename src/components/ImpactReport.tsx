@@ -155,6 +155,8 @@ const ImpactReport = () => {
               data={reportData.age_distribution} 
               viewType={ageViewFilter}
               onViewTypeChange={setAgeViewFilter}
+              interviewActivityData={getCurrentInterviewData()}
+              interviewViewFilter={interviewViewFilter}
             />
           </Card>
 

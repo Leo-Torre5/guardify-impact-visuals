@@ -10,9 +10,20 @@ interface AgeDistributionChartProps {
   };
   viewType: string;
   onViewTypeChange: (value: string) => void;
+  interviewActivityData: Array<{
+    month: string;
+    count: number;
+  }>;
+  interviewViewFilter: string;
 }
 
-const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewType, onViewTypeChange }) => {
+const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ 
+  data, 
+  viewType, 
+  onViewTypeChange, 
+  interviewActivityData,
+  interviewViewFilter 
+}) => {
   // Calculate regional multipliers
   const getRegionalMultiplier = (region: string) => {
     const multipliers: { [key: string]: number } = {
@@ -35,7 +46,11 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
     Object.entries(data).map(([key, value]) => [key, Math.round(value * multiplier)])
   );
 
-  const total = Object.values(adjustedData).reduce((sum, value) => sum + value, 0);
+  // Get total from Interview Activity (Total 2025 Interviews Logged)
+  const interviewMultiplier = getRegionalMultiplier(interviewViewFilter);
+  const total2025Interviews = Math.round(
+    interviewActivityData.reduce((sum, item) => sum + item.count, 0) * interviewMultiplier
+  );
 
   // Color scheme for age ranges (maintaining current colors)
   const colors = [
@@ -68,16 +83,41 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
     chart: {
       type: 'pie',
       backgroundColor: 'transparent',
-      height: 400
+      height: 400,
+      custom: {},
+      events: {
+        render() {
+          const chart = this;
+          const series = chart.series[0];
+          let customLabel = (chart.options.chart as any).custom.label;
+
+          if (!customLabel) {
+            customLabel = (chart.options.chart as any).custom.label =
+              chart.renderer.label(
+                `Total<br/><strong>${total2025Interviews.toLocaleString()}</strong>`
+              )
+                .css({
+                  color: '#191C35',
+                  textAnchor: 'middle',
+                  fontFamily: 'Poppins'
+                })
+                .add();
+          }
+
+          const x = series.center[0] + chart.plotLeft;
+          const y = series.center[1] + chart.plotTop - (customLabel.attr('height') / 2);
+
+          customLabel.attr({ x, y });
+          
+          // Set font size based on chart diameter
+          customLabel.css({
+            fontSize: `${series.center[2] / 12}px`
+          });
+        }
+      }
     },
     title: {
-      text: `<span style="font-size: 24px; font-weight: bold; color: #191C35; font-family: Poppins">${total.toLocaleString()}</span><br/><span style="font-size: 12px; color: #767676; font-family: Poppins">Total Interviews</span>`,
-      align: 'center',
-      verticalAlign: 'middle',
-      useHTML: true,
-      style: {
-        fontFamily: 'Poppins'
-      }
+      text: ''
     },
     tooltip: {
       pointFormat: '<b>{point.name}</b><br/>{point.y} interviews ({point.percentage:.1f}%)',
@@ -90,45 +130,41 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({ data, viewT
         valueSuffix: '%'
       }
     },
+    legend: {
+      enabled: false
+    },
     plotOptions: {
-      pie: {
+      series: {
         allowPointSelect: true,
         cursor: 'pointer',
-        dataLabels: {
+        borderRadius: 8,
+        dataLabels: [{
           enabled: true,
-          format: '<b>{point.name}</b><br/>{point.percentage:.1f}%',
+          distance: 20,
+          format: '{point.name}',
           style: {
             fontFamily: 'Poppins',
             fontSize: '12px',
             color: '#191C35'
-          },
-          distance: 20
-        },
-        showInLegend: true,
-        innerSize: '50%',
-        states: {
-          hover: {
-            halo: {
-              size: 10
-            }
           }
-        }
+        }, {
+          enabled: true,
+          distance: -15,
+          format: '{point.percentage:.0f}%',
+          style: {
+            fontSize: '0.9em',
+            fontFamily: 'Poppins',
+            color: '#191C35'
+          }
+        }],
+        showInLegend: true,
+        innerSize: '75%'
       }
-    },
-    legend: {
-      align: 'right',
-      verticalAlign: 'middle',
-      layout: 'vertical',
-      itemStyle: {
-        fontFamily: 'Poppins',
-        fontSize: '12px',
-        color: '#191C35'
-      },
-      symbolRadius: 0
     },
     series: [{
       type: 'pie',
       name: 'Age Distribution',
+      colorByPoint: true,
       data: chartData
     }],
     credits: {
