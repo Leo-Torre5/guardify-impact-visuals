@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import InterviewsChart from './charts/InterviewsChart';
 import InterviewsUploadedChart from './charts/InterviewsUploadedChart';
 import KPICards from './charts/KPICards';
@@ -9,7 +10,8 @@ import CostSavingsChart from './charts/CostSavingsChart';
 import InteractiveUSMap from './charts/InteractiveUSMap';
 
 const ImpactReport = () => {
-  const [combinedViewFilter, setCombinedViewFilter] = useState("nationwide");
+  const [combinedRegionFilter, setCombinedRegionFilter] = useState("nationwide");
+  const [combinedStateFilter, setCombinedStateFilter] = useState("all-states");
   const [uploadViewFilter, setUploadViewFilter] = useState("nationwide");
 
   // Regional age distribution data (mock data for different regions)
@@ -161,10 +163,19 @@ const ImpactReport = () => {
     time_saved_hours: 204738
   };
 
+  // Determine which filter to use for the combined view
+  const getEffectiveFilter = () => {
+    if (combinedStateFilter !== "all-states") {
+      return combinedStateFilter;
+    }
+    return combinedRegionFilter;
+  };
+
   const getCurrentInterviewData = () => {
-    if (combinedViewFilter === 'my-cac') {
+    const effectiveFilter = getEffectiveFilter();
+    if (effectiveFilter === 'my-cac') {
       return reportData.interviews_uploaded_by_month.my_cac;
-    } else if (combinedViewFilter === 'all-states') {
+    } else if (effectiveFilter === 'all-states') {
       return reportData.interviews_uploaded_by_month.all_states;
     } else {
       return reportData.interviews_uploaded_by_month.nationwide;
@@ -181,6 +192,74 @@ const ImpactReport = () => {
     }
   };
 
+  // Region filter options
+  const regionOptions = [
+    { value: "nationwide", label: "Nationwide" },
+    { value: "my-cac", label: "My CAC" },
+    { value: "northeast", label: "Northeast" },
+    { value: "southeast", label: "Southeast" },
+    { value: "midwest", label: "Midwest" },
+    { value: "southwest", label: "Southwest" },
+    { value: "west", label: "West" },
+    { value: "northwest", label: "Northwest" }
+  ];
+
+  // State filter options (all US states + Puerto Rico)
+  const stateOptions = [
+    { value: "all-states", label: "All States" },
+    { value: "alabama", label: "Alabama" },
+    { value: "alaska", label: "Alaska" },
+    { value: "arizona", label: "Arizona" },
+    { value: "arkansas", label: "Arkansas" },
+    { value: "california", label: "California" },
+    { value: "colorado", label: "Colorado" },
+    { value: "connecticut", label: "Connecticut" },
+    { value: "delaware", label: "Delaware" },
+    { value: "florida", label: "Florida" },
+    { value: "georgia", label: "Georgia" },
+    { value: "hawaii", label: "Hawaii" },
+    { value: "idaho", label: "Idaho" },
+    { value: "illinois", label: "Illinois" },
+    { value: "indiana", label: "Indiana" },
+    { value: "iowa", label: "Iowa" },
+    { value: "kansas", label: "Kansas" },
+    { value: "kentucky", label: "Kentucky" },
+    { value: "louisiana", label: "Louisiana" },
+    { value: "maine", label: "Maine" },
+    { value: "maryland", label: "Maryland" },
+    { value: "massachusetts", label: "Massachusetts" },
+    { value: "michigan", label: "Michigan" },
+    { value: "minnesota", label: "Minnesota" },
+    { value: "mississippi", label: "Mississippi" },
+    { value: "missouri", label: "Missouri" },
+    { value: "montana", label: "Montana" },
+    { value: "nebraska", label: "Nebraska" },
+    { value: "nevada", label: "Nevada" },
+    { value: "new-hampshire", label: "New Hampshire" },
+    { value: "new-jersey", label: "New Jersey" },
+    { value: "new-mexico", label: "New Mexico" },
+    { value: "new-york", label: "New York" },
+    { value: "north-carolina", label: "North Carolina" },
+    { value: "north-dakota", label: "North Dakota" },
+    { value: "ohio", label: "Ohio" },
+    { value: "oklahoma", label: "Oklahoma" },
+    { value: "oregon", label: "Oregon" },
+    { value: "pennsylvania", label: "Pennsylvania" },
+    { value: "rhode-island", label: "Rhode Island" },
+    { value: "south-carolina", label: "South Carolina" },
+    { value: "south-dakota", label: "South Dakota" },
+    { value: "tennessee", label: "Tennessee" },
+    { value: "texas", label: "Texas" },
+    { value: "utah", label: "Utah" },
+    { value: "vermont", label: "Vermont" },
+    { value: "virginia", label: "Virginia" },
+    { value: "washington", label: "Washington" },
+    { value: "west-virginia", label: "West Virginia" },
+    { value: "wisconsin", label: "Wisconsin" },
+    { value: "wyoming", label: "Wyoming" },
+    { value: "puerto-rico", label: "Puerto Rico" }
+  ];
+
   return (
     <div className="bg-[#FAFAFA] min-h-full">
       {/* Content */}
@@ -193,74 +272,103 @@ const ImpactReport = () => {
         <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
           <div className="text-left mb-6">
             <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Interview Activity & Age Distribution</h3>
-            <p className="text-[#767676] font-poppins text-sm">
-              {combinedViewFilter === 'my-cac' 
-                ? 'Your team\'s interview activity and age distribution of people interviewed.'
-                : combinedViewFilter === 'all-states'
-                ? 'Interview activity and age distribution across all US states and territories.'
-                : 'Interview activity and age distribution across all regions.'
-              }
+            <p className="text-[#767676] font-poppins text-sm mb-4">
+              Interview activity and age distribution across all regions.
             </p>
+            
+            {/* Dual Filters */}
+            <div className="flex gap-4 mb-6">
+              <Select value={combinedRegionFilter} onValueChange={setCombinedRegionFilter}>
+                <SelectTrigger className="w-48 font-poppins bg-white border-[#1E3A8A] text-[#1E3A8A] hover:bg-gray-50 text-sm">
+                  <SelectValue placeholder="Select region" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-[#1E3A8A] z-[9999]">
+                  {regionOptions.map((option) => (
+                    <SelectItem 
+                      key={option.value} 
+                      value={option.value}
+                      className="focus:bg-[#DBEAFE] focus:text-[#1E3A8A] text-[#1E3A8A]"
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={combinedStateFilter} onValueChange={setCombinedStateFilter}>
+                <SelectTrigger className="w-48 font-poppins bg-white border-[#1E3A8A] text-[#1E3A8A] hover:bg-gray-50 text-sm">
+                  <SelectValue placeholder="Select state" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-[#1E3A8A] z-[9999] max-h-60">
+                  {stateOptions.map((option) => (
+                    <SelectItem 
+                      key={option.value} 
+                      value={option.value}
+                      className="focus:bg-[#DBEAFE] focus:text-[#1E3A8A] text-[#1E3A8A]"
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Interview Activity - Left Side */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="text-lg font-medium text-[#191C35] font-poppins">Interview Activity</h4>
-              </div>
               <InterviewsChart 
                 data={getCurrentInterviewData()} 
-                viewType={combinedViewFilter}
-                onViewTypeChange={setCombinedViewFilter}
+                viewType={getEffectiveFilter()}
+                onViewTypeChange={() => {}} // Controlled by parent filters
               />
             </div>
 
             {/* Age Distribution - Right Side */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="text-lg font-medium text-[#191C35] font-poppins">Age Distribution of People Interviewed</h4>
-              </div>
               <AgeDistributionChart 
-                data={getAgeDistributionByRegion(combinedViewFilter)} 
-                viewType={combinedViewFilter}
-                onViewTypeChange={setCombinedViewFilter}
+                data={getAgeDistributionByRegion(getEffectiveFilter())} 
+                viewType={getEffectiveFilter()}
+                onViewTypeChange={() => {}} // Controlled by parent filters
                 interviewActivityData={getCurrentInterviewData()}
               />
             </div>
           </div>
         </Card>
 
-        {/* Uploaded Video Interviews - Moved Below */}
-        <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-          <div className="text-left mb-6">
-            <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Uploaded Video Interviews</h3>
-            <p className="text-[#767676] font-poppins text-sm">
-              {uploadViewFilter === 'my-cac' 
-                ? 'Your team\'s video uploads to secure platform monthly.'
-                : uploadViewFilter === 'all-states'
-                ? 'Video evidence uploaded across all US states and territories monthly.'
-                : 'Video evidence uploaded to secure platform monthly.'
-              }
-            </p>
-          </div>
-          <InterviewsUploadedChart 
-            data={getCurrentUploadData()} 
-            viewType={uploadViewFilter}
-            onViewTypeChange={setUploadViewFilter}
-          />
-        </Card>
+        {/* Side-by-Side: Uploaded Video Interviews and Agency Engagement */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Uploaded Video Interviews - Left Side */}
+          <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
+            <div className="text-left mb-6">
+              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Uploaded Video Interviews</h3>
+              <p className="text-[#767676] font-poppins text-sm">
+                {uploadViewFilter === 'my-cac' 
+                  ? 'Your team\'s video uploads to secure platform monthly.'
+                  : uploadViewFilter === 'all-states'
+                  ? 'Video evidence uploaded across all US states and territories monthly.'
+                  : 'Video evidence uploaded to secure platform monthly.'
+                }
+              </p>
+            </div>
+            <InterviewsUploadedChart 
+              data={getCurrentUploadData()} 
+              viewType={uploadViewFilter}
+              onViewTypeChange={setUploadViewFilter}
+            />
+          </Card>
 
-        {/* Agency Engagement - Now Full Width */}
-        <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
-          <div className="text-left mb-6">
-            <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Agencies Engaged Across MDT</h3>
-            <p className="text-[#767676] font-poppins">
-              Multi-disciplinary team collaboration ensures comprehensive support for each case.
-            </p>
-          </div>
-          <AgencyEngagementChart data={reportData.agency_engagement} />
-        </Card>
+          {/* Agency Engagement - Right Side */}
+          <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">
+            <div className="text-left mb-6">
+              <h3 className="text-xl font-semibold text-[#191C35] mb-2 font-poppins">Agencies Engaged Across MDT</h3>
+              <p className="text-[#767676] font-poppins">
+                Multi-disciplinary team collaboration ensures comprehensive support for each case.
+              </p>
+            </div>
+            <AgencyEngagementChart data={reportData.agency_engagement} />
+          </Card>
+        </div>
 
         {/* Agency Coverage Map */}
         <Card className="p-6 bg-white shadow-sm border border-[#F3F3F3] rounded-xl">

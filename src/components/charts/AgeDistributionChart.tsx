@@ -32,7 +32,21 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
       'midwest': 0.18,
       'southwest': 0.15,
       'west': 0.12,
-      'northwest': 0.05
+      'northwest': 0.05,
+      // Individual states get small multipliers
+      'alabama': 0.015, 'alaska': 0.002, 'arizona': 0.022, 'arkansas': 0.009,
+      'california': 0.12, 'colorado': 0.018, 'connecticut': 0.011, 'delaware': 0.003,
+      'florida': 0.067, 'georgia': 0.033, 'hawaii': 0.004, 'idaho': 0.005,
+      'illinois': 0.039, 'indiana': 0.021, 'iowa': 0.010, 'kansas': 0.009,
+      'kentucky': 0.014, 'louisiana': 0.014, 'maine': 0.004, 'maryland': 0.019,
+      'massachusetts': 0.021, 'michigan': 0.031, 'minnesota': 0.017, 'mississippi': 0.009,
+      'missouri': 0.019, 'montana': 0.003, 'nebraska': 0.006, 'nevada': 0.010,
+      'new-hampshire': 0.004, 'new-jersey': 0.028, 'new-mexico': 0.006, 'new-york': 0.061,
+      'north-carolina': 0.032, 'north-dakota': 0.002, 'ohio': 0.036, 'oklahoma': 0.012,
+      'oregon': 0.013, 'pennsylvania': 0.040, 'rhode-island': 0.003, 'south-carolina': 0.016,
+      'south-dakota': 0.003, 'tennessee': 0.021, 'texas': 0.091, 'utah': 0.010,
+      'vermont': 0.002, 'virginia': 0.026, 'washington': 0.024, 'west-virginia': 0.005,
+      'wisconsin': 0.018, 'wyoming': 0.002, 'puerto-rico': 0.010
     };
     return multipliers[region] || 1.0;
   };
@@ -216,7 +230,7 @@ const AgeDistributionChart: React.FC<AgeDistributionChartProps> = ({
         
         <div className="text-left mt-6">
           <div className="text-sm text-[#767676] font-poppins">
-            Age distribution for {regionOptions.find(r => r.value === viewType)?.label} interviews
+            Age distribution for {regionOptions.find(r => r.value === viewType)?.label || 'Selected Region'} interviews
           </div>
         </div>
       </div>
