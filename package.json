@@ -19,7 +19,6 @@
     "@tanstack/react-query": "^5.56.2",
     "highcharts": "^11.2.0",
     "highcharts-react-official": "^3.2.2",
-    "highcharts/modules/map": "^11.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sonner": "^1.5.0"
